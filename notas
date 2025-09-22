@@ -1,0 +1,14 @@
+O que eu quero neste app:
+
+
+Eu quero ser capaz de logar nele. (o que foi feito já)
+Eu quero poder cadastrar uma comida - endpoint do tipo post
+e ter a possibilidade de colocar o resultado dessa comida no fim do dia -- is_safe(bool)
+entao no fim eu quero:
+    gerar entao uma lista de comidas que tem is_safe: true e outra lista is_safe: false
+
+Eu quero poder ver a lista de comidas que eu cadastrei, e ver se elas estao na lista safe ou nao.
+Eu quero poder editar uma comida que eu cadastrei.
+Eu quero poder deletar uma comida que eu cadastrei.
+Eu quero poder ver o total de comidas safe e nao safe que eu cadastrei.
+Eu quero poder ver o total de comidas safe e nao safe que eu cadastrei em um periodo de tempo (ex: ultimos 7 dias, ultimos 30 dias)
