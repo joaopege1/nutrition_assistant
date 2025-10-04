@@ -1,5 +1,5 @@
 import sqlalchemy
-from sqlalchemy import create_engine, Column, Integer, String, Boolean, DateTime
+from sqlalchemy import create_engine, Column, Integer, String, Boolean, DateTime, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -15,7 +15,8 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     full_name = Column(String)
     hashed_password = Column(String)
-    disabled = Column(Boolean, default=False)
+    is_active = Column(Boolean, default=True)
+    role = Column(String)
 
 class FoodEntry(Base):
     __tablename__ = "food_entries"
@@ -24,6 +25,6 @@ class FoodEntry(Base):
     food = Column(String, index=True)
     quantity = Column(Integer)
     is_safe = Column(Boolean)
-    date = Column(DateTime)
+    owner_id = Column(Integer, ForeignKey("users.id"))
 
 Base.metadata.create_all(bind=engine)
