@@ -49,3 +49,4 @@ async def change_password(
     db_user.hashed_password = new_hashed_password
     db.commit()
     return {"message": "Password updated successfully"}
+
