@@ -22,3 +22,5 @@ quero colocar informaçoes se tive algum sintoma, e quais foram esses sintomas.
 
 
 sqlite3 auth.db
+
+Implementar uma forma de notificar o usuario a dizer se a comida é safe ou nao apos 24h.

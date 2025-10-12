@@ -1,0 +1,83 @@
+{
+  "common": {
+    "loading": "Carregando...",
+    "error": "Erro",
+    "success": "Sucesso",
+    "cancel": "Cancelar",
+    "save": "Salvar",
+    "edit": "Editar",
+    "delete": "Excluir",
+    "confirm": "Confirmar",
+    "close": "Fechar",
+    "yes": "Sim",
+    "no": "Não"
+  },
+  "auth": {
+    "login": "Entrar",
+    "signup": "Cadastrar",
+    "logout": "Sair",
+    "username": "Nome de usuário",
+    "password": "Senha",
+    "confirmPassword": "Confirmar senha",
+    "fullName": "Nome completo",
+    "role": "Tipo de usuário",
+    "user": "Usuário",
+    "admin": "Administrador",
+    "loginTitle": "Faça login",
+    "loginSubtitle": "Entre com suas credenciais",
+    "signupTitle": "Criar conta",
+    "signupSubtitle": "Preencha os dados para se cadastrar",
+    "alreadyHaveAccount": "Já tem conta?",
+    "dontHaveAccount": "Não tem conta?",
+    "loginHere": "Faça login",
+    "signupHere": "Cadastre-se",
+    "loginError": "Erro ao fazer login",
+    "signupError": "Erro ao criar conta",
+    "loginSuccess": "Login realizado com sucesso",
+    "signupSuccess": "Conta criada com sucesso"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Bem-vindo",
+    "userInfo": "Informações do usuário",
+    "role": "Função",
+    "totalEntries": "Total de entradas",
+    "safeEntries": "Entradas seguras",
+    "unsafeEntries": "Entradas inseguras",
+    "foodEntries": "Entradas de Comida",
+    "noEntries": "Nenhuma entrada encontrada.",
+    "addEntry": "Nova Entrada",
+    "user": "Usuário",
+    "food": "Comida",
+    "quantity": "Quantidade",
+    "date": "Data",
+    "safe": "Seguro",
+    "unsafe": "Inseguro",
+    "actions": "Ações",
+    "invalidDate": "Data inválida",
+    "noDate": "Sem data"
+  },
+  "forms": {
+    "foodEntry": {
+      "title": "Entrada de Comida",
+      "user": "Usuário",
+      "food": "Comida",
+      "quantity": "Quantidade",
+      "date": "Data",
+      "isSafe": "É seguro?",
+      "create": "Criar Entrada",
+      "update": "Atualizar Entrada",
+      "creating": "Criando entrada...",
+      "updating": "Atualizando entrada...",
+      "success": "Entrada criada com sucesso",
+      "updateSuccess": "Entrada atualizada com sucesso",
+      "error": "Erro ao criar entrada",
+      "updateError": "Erro ao atualizar entrada"
+    }
+  },
+  "language": {
+    "select": "Selecionar idioma",
+    "portuguese": "Português",
+    "english": "English"
+  }
+}

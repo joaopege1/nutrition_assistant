@@ -54,6 +54,7 @@ async def create_food_entry(
         food=Item.food,
         quantity=Item.quantity,
         is_safe=Item.is_safe,
+        date=Item.date,
     )
     db.add(food_entry)
     db.commit()
@@ -97,6 +98,7 @@ async def update_food_entry(
     food_entry.food = Item.food
     food_entry.quantity = Item.quantity
     food_entry.is_safe = Item.is_safe
+    food_entry.date = Item.date
     db.commit()
     db.refresh(food_entry)
     return {"message": "Food entry updated", "food_entry": Item}

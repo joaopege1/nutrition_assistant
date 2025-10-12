@@ -25,6 +25,7 @@ class FoodEntry(Base):
     food = Column(String, index=True)
     quantity = Column(Integer)
     is_safe = Column(Boolean)
+    date = Column(DateTime)
     owner_id = Column(Integer, ForeignKey("users.id"))
 
 Base.metadata.create_all(bind=engine)
