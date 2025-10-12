@@ -39,6 +39,7 @@
   "dashboard": {
     "title": "Dashboard",
     "welcome": "Bem-vindo",
+    "welcomeMessage": "Bem-vindo, {name}!",
     "userInfo": "Informações do usuário",
     "role": "Função",
     "totalEntries": "Total de entradas",

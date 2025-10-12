@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 type Language = 'pt' | 'en';
 
 interface TranslationContextType {
-  t: (key: string) => string;
+  t: (key: string, params?: Record<string, any>) => string;
   language: Language;
   setLanguage: (lang: Language) => void;
   availableLanguages: { code: Language; name: string }[];
@@ -52,21 +52,22 @@ const ptTranslations = {
   },
   "dashboard": {
     "title": "Dashboard",
-    "welcome": "Bem-vindo",
+    "welcome": "Bem-vindo,",
+    "welcomeMessage": "Bem-vindo, {name}!",
     "userInfo": "Informações do usuário",
     "role": "Função",
-    "totalEntries": "Total de entradas",
-    "safeEntries": "Entradas seguras",
-    "unsafeEntries": "Entradas inseguras",
-    "foodEntries": "Entradas de Comida",
-    "noEntries": "Nenhuma entrada encontrada.",
+    "totalEntries": "Total de Comidas",
+    "safeEntries": "Comidas Seguras",
+    "unsafeEntries": "Comidas Não Seguras",
+    "foodEntries": "Comidas Registradas",
+    "noEntries": "Nenhuma Comida Encontrada.",
     "addEntry": "Nova Entrada",
     "user": "Usuário",
     "food": "Comida",
     "quantity": "Quantidade",
     "date": "Data",
     "safe": "Seguro",
-    "unsafe": "Inseguro",
+    "unsafe": "Perigoso",
     "actions": "Ações",
     "invalidDate": "Data inválida",
     "noDate": "Sem data"
@@ -137,6 +138,7 @@ const enTranslations = {
   "dashboard": {
     "title": "Dashboard",
     "welcome": "Welcome",
+    "welcomeMessage": "Welcome, {name}!",
     "userInfo": "User information",
     "role": "Role",
     "totalEntries": "Total entries",
@@ -196,7 +198,7 @@ export const TranslationProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('language', lang);
   };
 
-  const t = (key: string): string => {
+  const t = (key: string, params?: Record<string, any>): string => {
     const keys = key.split('.');
     let value: any = translations[language];
     
@@ -209,7 +211,18 @@ export const TranslationProvider = ({ children }: { children: ReactNode }) => {
       }
     }
     
-    return typeof value === 'string' ? value : key;
+    if (typeof value !== 'string') {
+      return key;
+    }
+    
+    // Interpolação de variáveis
+    if (params) {
+      return value.replace(/\{(\w+)\}/g, (match, paramKey) => {
+        return params[paramKey] !== undefined ? params[paramKey] : match;
+      });
+    }
+    
+    return value;
   };
 
   const availableLanguages = [

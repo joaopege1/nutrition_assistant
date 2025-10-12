@@ -151,7 +151,7 @@ const MainScreen: React.FC = () => {
                         color: 'var(--text-secondary)',
                         fontSize: '14px'
                     }}>
-                        Bem-vindo, {user?.full_name || user?.username}!
+                        {t('dashboard.welcomeMessage', { name: user?.full_name || user?.username })}
                     </p>
                 </div>
                 
@@ -397,13 +397,17 @@ const MainScreen: React.FC = () => {
                                                             onClick={() => setEditingEntry(entry)}
                                                             style={{
                                                                 padding: '6px 12px',
-                                                                backgroundColor: 'var(--button-info)',
+                                                                backgroundColor: '#007bff',
                                                                 color: 'white',
                                                                 border: 'none',
                                                                 borderRadius: '6px',
                                                                 fontSize: '12px',
-                                                                cursor: 'pointer'
+                                                                fontWeight: '600',
+                                                                cursor: 'pointer',
+                                                                transition: 'background-color 0.3s ease'
                                                             }}
+                                                            onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#0056b3'}
+                                                            onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#007bff'}
                                                         >
                                                             {t('common.edit')}
                                                         </button>
@@ -416,8 +420,12 @@ const MainScreen: React.FC = () => {
                                                                 border: 'none',
                                                                 borderRadius: '6px',
                                                                 fontSize: '12px',
-                                                                cursor: 'pointer'
+                                                                fontWeight: '600',
+                                                                cursor: 'pointer',
+                                                                transition: 'background-color 0.3s ease'
                                                             }}
+                                                            onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--button-danger-hover)'}
+                                                            onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--button-danger)'}
                                                         >
                                                             {t('common.delete')}
                                                         </button>

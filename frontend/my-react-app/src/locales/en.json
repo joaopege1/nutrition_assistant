@@ -39,6 +39,7 @@
   "dashboard": {
     "title": "Dashboard",
     "welcome": "Welcome",
+    "welcomeMessage": "Welcome, {name}!",
     "userInfo": "User information",
     "role": "Role",
     "totalEntries": "Total entries",

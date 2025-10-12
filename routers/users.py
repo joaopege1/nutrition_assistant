@@ -34,7 +34,7 @@ async def get_user(user: user_dependency, db: db_dependency):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials")
     return db.query(User).filter(User.id == user['id']).first()
 
-@router.put("/passwoerd", status_code=status.HTTP_204_NO_CONTENT)
+@router.put("/password", status_code=status.HTTP_204_NO_CONTENT)
 async def change_password(
     user_data: UserVerification,
     user: user_dependency,
