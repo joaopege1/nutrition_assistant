@@ -32,6 +32,7 @@ export interface FoodEntry {
     quantity: number;
     is_safe: boolean;
     date: string;
+    owner_id?: number; // ID do usuário que criou a entrada
 }
 
 export interface FoodEntryCreate {

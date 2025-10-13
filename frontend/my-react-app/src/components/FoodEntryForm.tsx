@@ -12,7 +12,7 @@ interface FoodEntryFormProps {
 const FoodEntryForm: React.FC<FoodEntryFormProps> = ({ onSubmit, onCancel, initialData, isEditing = false }) => {
     const { t } = useTranslation();
     const [formData, setFormData] = useState<FoodEntryCreate>({
-        user: initialData?.user || '',
+        user: '', // Será preenchido automaticamente pelo backend
         food: initialData?.food || '',
         quantity: initialData?.quantity || 1,
         is_safe: initialData?.is_safe || false,
@@ -38,33 +38,6 @@ const FoodEntryForm: React.FC<FoodEntryFormProps> = ({ onSubmit, onCancel, initi
             </h3>
             
             <form onSubmit={handleSubmit}>
-                <div style={{ marginBottom: '16px' }}>
-                    <label style={{
-                        display: 'block',
-                        color: '#333',
-                        fontSize: '14px',
-                        fontWeight: '500',
-                        marginBottom: '8px'
-                    }}>{t('forms.foodEntry.user')}</label>
-                    <input
-                        type="text"
-                        value={formData.user}
-                        onChange={(e) => setFormData({ ...formData, user: e.target.value })}
-                        required
-                        placeholder="Nome do usuário"
-                        style={{
-                            width: '100%',
-                            padding: '12px 16px',
-                            border: '2px solid #e1e5e9',
-                            borderRadius: '8px',
-                            fontSize: '16px',
-                            transition: 'border-color 0.3s ease',
-                            boxSizing: 'border-box'
-                        }}
-                        onFocus={(e) => e.target.style.borderColor = '#667eea'}
-                        onBlur={(e) => e.target.style.borderColor = '#e1e5e9'}
-                    />
-                </div>
 
                 <div style={{ marginBottom: '16px' }}>
                     <label style={{

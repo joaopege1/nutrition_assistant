@@ -35,7 +35,13 @@ async def Get_Info_From_Database(user: user_dependency,
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials")
     if not db.query(User).filter(User.id == user['id']).first():
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials")
-    food_entries = db.query(FoodEntry).all()
+    
+    # Se for admin, retorna todas as entradas. Se for usuário comum, retorna apenas suas entradas
+    if user['user_role'] == 'admin':
+        food_entries = db.query(FoodEntry).all()
+    else:
+        food_entries = db.query(FoodEntry).filter(FoodEntry.owner_id == user['id']).all()
+    
     return food_entries
 
 
@@ -49,17 +55,19 @@ async def create_food_entry(
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials")
     if not db.query(User).filter(User.id == user['id']).first():
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials")
+    
+    # Associa automaticamente ao usuário logado
     food_entry = FoodEntry(
-        user=Item.user,
+        user=user['username'],  # Usa o username do usuário logado
         food=Item.food,
         quantity=Item.quantity,
         is_safe=Item.is_safe,
         date=Item.date,
+        owner_id=user['id']  # Associa ao ID do usuário logado
     )
     db.add(food_entry)
     db.commit()
     db.refresh(food_entry)
-
 
     return {"message": "Food entry created", "food_entry": Item}
 
@@ -73,9 +81,15 @@ async def delete_food_entry(
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials")
     if not db.query(User).filter(User.id == user['id']).first():
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials")
+    
     food_entry = db.query(FoodEntry).filter(FoodEntry.id == food_entry_id).first()
     if food_entry is None:
-        return {"message": "Food entry not found"}
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Food entry not found")
+    
+    # Verifica se o usuário é dono da entrada ou admin
+    if user['user_role'] != 'admin' and food_entry.owner_id != user['id']:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You can only delete your own food entries")
+    
     db.delete(food_entry)
     db.commit()
     return {"message": "Food entry deleted"}
@@ -91,14 +105,21 @@ async def update_food_entry(
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials")
     if not db.query(User).filter(User.id == user['id']).first():
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials")
+    
     food_entry = db.query(FoodEntry).filter(FoodEntry.id == food_entry_id).first()
     if food_entry is None:
-        return {"message": "Food entry not found"}
-    food_entry.user = Item.user
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Food entry not found")
+    
+    # Verifica se o usuário é dono da entrada ou admin
+    if user['user_role'] != 'admin' and food_entry.owner_id != user['id']:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="You can only update your own food entries")
+    
+    food_entry.user = user['username']  # Mantém o username do usuário logado
     food_entry.food = Item.food
     food_entry.quantity = Item.quantity
     food_entry.is_safe = Item.is_safe
     food_entry.date = Item.date
+    # owner_id não é alterado - mantém o dono original
     db.commit()
     db.refresh(food_entry)
     return {"message": "Food entry updated", "food_entry": Item}

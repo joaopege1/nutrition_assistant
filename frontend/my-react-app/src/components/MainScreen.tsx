@@ -156,26 +156,24 @@ const MainScreen: React.FC = () => {
                 </div>
                 
                 <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
-                    {user?.role === 'admin' && (
-                        <button
-                            onClick={() => setShowForm(true)}
-                            style={{
-                                padding: isMobile ? '10px 16px' : '12px 20px',
-                                backgroundColor: 'var(--button-success)',
-                                color: 'white',
-                                border: 'none',
-                                borderRadius: '8px',
-                                fontSize: '14px',
-                                fontWeight: '600',
-                                cursor: 'pointer',
-                                transition: 'background-color 0.3s ease'
-                            }}
-                            onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--button-success-hover)'}
-                            onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--button-success)'}
-                        >
-                            + {t('dashboard.addEntry')}
-                        </button>
-                    )}
+                    <button
+                        onClick={() => setShowForm(true)}
+                        style={{
+                            padding: isMobile ? '10px 16px' : '12px 20px',
+                            backgroundColor: 'var(--button-success)',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '8px',
+                            fontSize: '14px',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                            transition: 'background-color 0.3s ease'
+                        }}
+                        onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--button-success-hover)'}
+                        onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--button-success)'}
+                    >
+                        + {t('dashboard.addEntry')}
+                    </button>
                     
                     <button 
                         onClick={handleLogout}
@@ -339,9 +337,7 @@ const MainScreen: React.FC = () => {
                                         <th style={{ padding: '16px', textAlign: 'left', borderBottom: `1px solid var(--border-color)`, color: 'var(--text-primary)' }}>{t('dashboard.quantity')}</th>
                                         <th style={{ padding: '16px', textAlign: 'left', borderBottom: `1px solid var(--border-color)`, color: 'var(--text-primary)' }}>{t('dashboard.date')}</th>
                                         <th style={{ padding: '16px', textAlign: 'left', borderBottom: `1px solid var(--border-color)`, color: 'var(--text-primary)' }}>{t('dashboard.safe')}</th>
-                                        {user?.role === 'admin' && (
-                                            <th style={{ padding: '16px', textAlign: 'left', borderBottom: `1px solid var(--border-color)`, color: 'var(--text-primary)' }}>{t('dashboard.actions')}</th>
-                                        )}
+                                        <th style={{ padding: '16px', textAlign: 'left', borderBottom: `1px solid var(--border-color)`, color: 'var(--text-primary)' }}>{t('dashboard.actions')}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -390,48 +386,51 @@ const MainScreen: React.FC = () => {
                                                     </span>
                                                 )}
                                             </td>
-                                            {user?.role === 'admin' && (
-                                                <td style={{ padding: '16px' }}>
-                                                    <div style={{ display: 'flex', gap: '8px' }}>
-                                                        <button
-                                                            onClick={() => setEditingEntry(entry)}
-                                                            style={{
-                                                                padding: '6px 12px',
-                                                                backgroundColor: '#007bff',
-                                                                color: 'white',
-                                                                border: 'none',
-                                                                borderRadius: '6px',
-                                                                fontSize: '12px',
-                                                                fontWeight: '600',
-                                                                cursor: 'pointer',
-                                                                transition: 'background-color 0.3s ease'
-                                                            }}
-                                                            onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#0056b3'}
-                                                            onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#007bff'}
-                                                        >
-                                                            {t('common.edit')}
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handleDeleteEntry(entry.id)}
-                                                            style={{
-                                                                padding: '6px 12px',
-                                                                backgroundColor: 'var(--button-danger)',
-                                                                color: 'white',
-                                                                border: 'none',
-                                                                borderRadius: '6px',
-                                                                fontSize: '12px',
-                                                                fontWeight: '600',
-                                                                cursor: 'pointer',
-                                                                transition: 'background-color 0.3s ease'
-                                                            }}
-                                                            onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--button-danger-hover)'}
-                                                            onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--button-danger)'}
-                                                        >
-                                                            {t('common.delete')}
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            )}
+                                            <td style={{ padding: '16px' }}>
+                                                <div style={{ display: 'flex', gap: '8px' }}>
+                                                    {/* Mostrar botões de editar/deletar se for admin ou se for o dono da entrada */}
+                                                    {(user?.role === 'admin' || entry.user === user?.username) && (
+                                                        <>
+                                                            <button
+                                                                onClick={() => setEditingEntry(entry)}
+                                                                style={{
+                                                                    padding: '6px 12px',
+                                                                    backgroundColor: '#007bff',
+                                                                    color: 'white',
+                                                                    border: 'none',
+                                                                    borderRadius: '6px',
+                                                                    fontSize: '12px',
+                                                                    fontWeight: '600',
+                                                                    cursor: 'pointer',
+                                                                    transition: 'background-color 0.3s ease'
+                                                                }}
+                                                                onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#0056b3'}
+                                                                onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#007bff'}
+                                                            >
+                                                                {t('common.edit')}
+                                                            </button>
+                                                            <button
+                                                                onClick={() => handleDeleteEntry(entry.id)}
+                                                                style={{
+                                                                    padding: '6px 12px',
+                                                                    backgroundColor: 'var(--button-danger)',
+                                                                    color: 'white',
+                                                                    border: 'none',
+                                                                    borderRadius: '6px',
+                                                                    fontSize: '12px',
+                                                                    fontWeight: '600',
+                                                                    cursor: 'pointer',
+                                                                    transition: 'background-color 0.3s ease'
+                                                                }}
+                                                                onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--button-danger-hover)'}
+                                                                onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--button-danger)'}
+                                                            >
+                                                                {t('common.delete')}
+                                                            </button>
+                                                        </>
+                                                    )}
+                                                </div>
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>

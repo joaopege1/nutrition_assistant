@@ -53,7 +53,7 @@ export const authService = {
 
     async changePassword(userData: { username: string; password: string }): Promise<{ message: string }> {
         try {
-            const response = await axios.put(`${API_BASE_URL}/users/passwoerd`, userData);
+            const response = await axios.put(`${API_BASE_URL}/users/password`, userData);
             return response.data;
         } catch (error) {
             console.error('Erro ao alterar senha:', error);
