@@ -34,7 +34,9 @@
     "loginError": "Login error",
     "signupError": "Error creating account",
     "loginSuccess": "Login successful",
-    "signupSuccess": "Account created successfully"
+    "signupSuccess": "Account created successfully",
+    "passwordMismatch": "Passwords do not match!",
+    "passwordTooShort": "Password must be at least 6 characters!"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -80,5 +82,24 @@
     "select": "Select language",
     "portuguese": "Português",
     "english": "English"
+  },
+  "admin": {
+    "userManagement": "Manage Users",
+    "userManagementSubtitle": "Promote users to administrators or demote administrators",
+    "backToDashboard": "← Back to Dashboard",
+    "manageUsers": "Manage Users",
+    "userList": "User List",
+    "noUsers": "No users found",
+    "administrator": "Administrator",
+    "user": "Regular User",
+    "active": "Active",
+    "inactive": "Inactive",
+    "changeRole": "Change permission",
+    "roleUpdated": "Permission updated successfully",
+    "roleUpdateError": "Error updating user permission",
+    "loadUsersError": "Error loading users",
+    "confirmRoleChange": "Are you sure you want to change this user's permission to {role}?",
+    "accessDenied": "Access denied. Only administrators can access this page.",
+    "loadingUsers": "Loading users..."
   }
 }

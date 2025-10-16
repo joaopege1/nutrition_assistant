@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { FoodEntry } from '../types';
+import type { FoodEntry, User } from '../types';
 
 const API_BASE_URL = 'http://localhost:8000';
 
@@ -32,6 +32,26 @@ export const adminService = {
             return response.data;
         } catch (error) {
             console.error('Erro ao deletar entrada de comida:', error);
+            throw error;
+        }
+    },
+
+    async getAllUsers(): Promise<User[]> {
+        try {
+            const response = await axios.get(`${API_BASE_URL}/auth/admin/users/`);
+            return response.data;
+        } catch (error) {
+            console.error('Erro ao buscar todos os usuários:', error);
+            throw error;
+        }
+    },
+
+    async updateUserRole(userId: number, role: string): Promise<{ message: string; user: User }> {
+        try {
+            const response = await axios.put(`${API_BASE_URL}/auth/admin/users/${userId}/role`, { role });
+            return response.data;
+        } catch (error) {
+            console.error('Erro ao atualizar role do usuário:', error);
             throw error;
         }
     }

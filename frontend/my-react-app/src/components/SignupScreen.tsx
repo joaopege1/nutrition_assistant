@@ -9,7 +9,7 @@ const SignupScreen: React.FC = () => {
     const [fullName, setFullName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [role, setRole] = useState('user');
+    const [role] = useState('user');
     const [isMobile, setIsMobile] = useState(false);
     const [isTablet, setIsTablet] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -35,12 +35,12 @@ const SignupScreen: React.FC = () => {
         setError('');
 
         if (password !== confirmPassword) {
-            setError('Senhas não coincidem!');
+            setError(t('auth.passwordMismatch'));
             return;
         }
 
         if (password.length < 6) {
-            setError('A senha deve ter pelo menos 6 caracteres!');
+            setError(t('auth.passwordTooShort'));
             return;
         }
 
@@ -156,7 +156,7 @@ const SignupScreen: React.FC = () => {
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             required
-                            placeholder="seu_usuario"
+                            placeholder="username"
                             style={{
                                 width: '100%',
                                 padding: isMobile ? '10px 14px' : '12px 16px',
@@ -203,35 +203,6 @@ const SignupScreen: React.FC = () => {
                         />
                     </div>
 
-                    <div style={{ marginBottom: isMobile ? '16px' : '20px' }}>
-                        <label style={{
-                            display: 'block',
-                            color: 'var(--text-primary)',
-                            fontSize: isMobile ? '13px' : '14px',
-                            fontWeight: '500',
-                            marginBottom: '8px'
-                        }}>Tipo de usuário</label>
-                        <select
-                            value={role}
-                            onChange={(e) => setRole(e.target.value)}
-                            style={{
-                                width: '100%',
-                                padding: isMobile ? '10px 14px' : '12px 16px',
-                                border: `2px solid var(--border-color)`,
-                                borderRadius: isMobile ? '6px' : '8px',
-                                fontSize: isMobile ? '16px' : '16px',
-                                transition: 'border-color 0.3s ease',
-                                boxSizing: 'border-box',
-                                backgroundColor: 'var(--input-bg)',
-                                color: 'var(--text-primary)'
-                            }}
-                            onFocus={(e) => e.target.style.borderColor = 'var(--button-primary)'}
-                            onBlur={(e) => e.target.style.borderColor = 'var(--border-color)'}
-                        >
-                            <option value="user">Usuário</option>
-                            <option value="admin">Administrador</option>
-                        </select>
-                    </div>
                     
                     <div style={{ marginBottom: isMobile ? '16px' : '20px' }}>
                         <label style={{

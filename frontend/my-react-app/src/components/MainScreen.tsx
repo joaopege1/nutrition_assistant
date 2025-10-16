@@ -12,11 +12,13 @@ const MainScreen: React.FC = () => {
     const { user, logout } = useAuth();
     const { t } = useTranslation();
     const [foodEntries, setFoodEntries] = useState<FoodEntry[]>([]);
+    const [filteredEntries, setFilteredEntries] = useState<FoodEntry[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
     const [editingEntry, setEditingEntry] = useState<FoodEntry | null>(null);
     const [isMobile, setIsMobile] = useState(false);
     const [isTablet, setIsTablet] = useState(false);
+    const [activeFilter, setActiveFilter] = useState<'all' | 'safe' | 'unsafe'>('all');
 
     useEffect(() => {
         const checkScreenSize = () => {
@@ -33,6 +35,29 @@ const MainScreen: React.FC = () => {
     useEffect(() => {
         loadFoodEntries();
     }, []);
+
+    useEffect(() => {
+        applyFilter();
+    }, [foodEntries, activeFilter]);
+
+    const applyFilter = () => {
+        let filtered = [...foodEntries];
+        
+        switch (activeFilter) {
+            case 'safe':
+                filtered = foodEntries.filter(entry => entry.is_safe);
+                break;
+            case 'unsafe':
+                filtered = foodEntries.filter(entry => !entry.is_safe);
+                break;
+            case 'all':
+            default:
+                filtered = foodEntries;
+                break;
+        }
+        
+        setFilteredEntries(filtered);
+    };
 
     const loadFoodEntries = async () => {
         try {
@@ -71,7 +96,7 @@ const MainScreen: React.FC = () => {
     };
 
     const handleDeleteEntry = async (id: number) => {
-        if (!confirm('Tem certeza que deseja deletar esta entrada?')) return;
+        if (!confirm(t('common.confirm'))) return;
         
         try {
             if (user?.role === 'admin') {
@@ -111,7 +136,7 @@ const MainScreen: React.FC = () => {
                 fontSize: '18px',
                 color: '#667eea'
             }}>
-                Carregando...
+                {t('common.loading')}
             </div>
         );
     }
@@ -126,70 +151,159 @@ const MainScreen: React.FC = () => {
         }}>
             {/* Header */}
             <div style={{
-                background: 'var(--card-bg)',
-                padding: isMobile ? '16px' : '24px',
-                boxShadow: `0 2px 10px var(--shadow)`,
+                background: 'linear-gradient(135deg, var(--card-bg) 0%, rgba(102, 126, 234, 0.1) 100%)',
+                padding: isMobile ? '20px' : '32px',
+                boxShadow: `0 8px 32px rgba(0,0,0,0.1)`,
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 flexWrap: 'wrap',
-                gap: '16px',
+                gap: '20px',
                 borderBottom: `1px solid var(--border-color)`,
-                transition: 'all 0.3s ease'
+                transition: 'all 0.3s ease',
+                position: 'relative',
+                overflow: 'hidden'
             }}>
-                <div>
-                    <h1 style={{
-                        margin: '0',
-                        color: 'var(--text-primary)',
-                        fontSize: isMobile ? '24px' : '28px',
-                        fontWeight: '600'
-                    }}>
-                        Dashboard
-                    </h1>
+                {/* Background decoration */}
+                <div style={{
+                    position: 'absolute',
+                    top: '-50%',
+                    right: '-20%',
+                    width: '200px',
+                    height: '200px',
+                    background: 'radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%)',
+                    borderRadius: '50%',
+                    zIndex: 0
+                }} />
+                
+                <div style={{ position: 'relative', zIndex: 1 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
+                        <div style={{
+                            width: '40px',
+                            height: '40px',
+                            background: 'linear-gradient(135deg, var(--button-primary) 0%, #667eea 100%)',
+                            borderRadius: '12px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '20px',
+                            color: 'white',
+                            boxShadow: `0 4px 12px rgba(102, 126, 234, 0.3)`
+                        }}>
+                            🍽️
+                        </div>
+                        <h1 style={{
+                            margin: '0',
+                            color: 'var(--text-primary)',
+                            fontSize: isMobile ? '24px' : '32px',
+                            fontWeight: '700',
+                            background: 'linear-gradient(135deg, var(--text-primary) 0%, #667eea 100%)',
+                            WebkitBackgroundClip: 'text',
+                            WebkitTextFillColor: 'transparent',
+                            backgroundClip: 'text'
+                        }}>
+                            {t('dashboard.title')}
+                        </h1>
+                    </div>
                     <p style={{
-                        margin: '4px 0 0 0',
+                        margin: '0',
                         color: 'var(--text-secondary)',
-                        fontSize: '14px'
+                        fontSize: '16px',
+                        fontWeight: '400',
+                        opacity: 0.8
                     }}>
                         {t('dashboard.welcomeMessage', { name: user?.full_name || user?.username })}
                     </p>
                 </div>
                 
-                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center', position: 'relative', zIndex: 1 }}>
                     <button
                         onClick={() => setShowForm(true)}
                         style={{
-                            padding: isMobile ? '10px 16px' : '12px 20px',
-                            backgroundColor: 'var(--button-success)',
+                            padding: isMobile ? '12px 20px' : '14px 24px',
+                            background: 'linear-gradient(135deg, var(--button-success) 0%, #28a745 100%)',
                             color: 'white',
                             border: 'none',
-                            borderRadius: '8px',
+                            borderRadius: '12px',
                             fontSize: '14px',
                             fontWeight: '600',
                             cursor: 'pointer',
-                            transition: 'background-color 0.3s ease'
+                            transition: 'all 0.3s ease',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            boxShadow: `0 4px 12px rgba(40, 167, 69, 0.3)`
                         }}
-                        onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--button-success-hover)'}
-                        onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--button-success)'}
+                        onMouseOver={(e) => {
+                            e.currentTarget.style.transform = 'translateY(-2px)';
+                            e.currentTarget.style.boxShadow = `0 8px 20px rgba(40, 167, 69, 0.4)`;
+                        }}
+                        onMouseOut={(e) => {
+                            e.currentTarget.style.transform = 'translateY(0)';
+                            e.currentTarget.style.boxShadow = `0 4px 12px rgba(40, 167, 69, 0.3)`;
+                        }}
                     >
-                        + {t('dashboard.addEntry')}
+                        <span style={{ fontSize: '16px' }}>+</span>
+                        {t('dashboard.addEntry')}
                     </button>
+                    
+                    {user?.role === 'admin' && (
+                        <button
+                            onClick={() => navigate('/admin/users')}
+                            style={{
+                                padding: isMobile ? '12px 20px' : '14px 24px',
+                                background: 'linear-gradient(135deg, var(--button-primary) 0%, #667eea 100%)',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '12px',
+                                fontSize: '14px',
+                                fontWeight: '600',
+                                cursor: 'pointer',
+                                transition: 'all 0.3s ease',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                boxShadow: `0 4px 12px rgba(102, 126, 234, 0.3)`
+                            }}
+                            onMouseOver={(e) => {
+                                e.currentTarget.style.transform = 'translateY(-2px)';
+                                e.currentTarget.style.boxShadow = `0 8px 20px rgba(102, 126, 234, 0.4)`;
+                            }}
+                            onMouseOut={(e) => {
+                                e.currentTarget.style.transform = 'translateY(0)';
+                                e.currentTarget.style.boxShadow = `0 4px 12px rgba(102, 126, 234, 0.3)`;
+                            }}
+                        >
+                            <span style={{ fontSize: '16px' }}>👥</span>
+                            {t('admin.userManagement')}
+                        </button>
+                    )}
                     
                     <button 
                         onClick={handleLogout}
                         style={{
-                            padding: isMobile ? '10px 16px' : '12px 20px',
-                            backgroundColor: 'var(--button-danger)',
+                            padding: isMobile ? '12px 20px' : '14px 24px',
+                            background: 'linear-gradient(135deg, var(--button-danger) 0%, #dc3545 100%)',
                             color: 'white',
                             border: 'none',
-                            borderRadius: '8px',
+                            borderRadius: '12px',
                             fontSize: '14px',
                             fontWeight: '600',
                             cursor: 'pointer',
-                            transition: 'background-color 0.3s ease'
+                            transition: 'all 0.3s ease',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            boxShadow: `0 4px 12px rgba(220, 53, 69, 0.3)`
                         }}
-                        onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--button-danger-hover)'}
-                        onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'var(--button-danger)'}
+                        onMouseOver={(e) => {
+                            e.currentTarget.style.transform = 'translateY(-2px)';
+                            e.currentTarget.style.boxShadow = `0 8px 20px rgba(220, 53, 69, 0.4)`;
+                        }}
+                        onMouseOut={(e) => {
+                            e.currentTarget.style.transform = 'translateY(0)';
+                            e.currentTarget.style.boxShadow = `0 4px 12px rgba(220, 53, 69, 0.3)`;
+                        }}
                     >
                         {t('auth.logout')}
                     </button>
@@ -246,83 +360,249 @@ const MainScreen: React.FC = () => {
                     </div>
                 )}
 
-                {/* Stats Cards */}
+                {/* Filter Cards */}
                 <div style={{
                     display: 'grid',
                     gridTemplateColumns: isMobile ? '1fr' : isTablet ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
-                    gap: '20px',
-                    marginBottom: '32px'
+                    gap: '24px',
+                    marginBottom: '40px'
                 }}>
-                    <div style={{
-                        background: 'var(--card-bg)',
-                        padding: '24px',
-                        borderRadius: '12px',
-                        boxShadow: `0 4px 12px var(--shadow)`,
-                        textAlign: 'center',
-                        border: `1px solid var(--border-color)`,
-                        transition: 'all 0.3s ease'
-                    }}>
-                        <h3 style={{ margin: '0 0 8px 0', color: 'var(--text-primary)' }}>{t('dashboard.totalEntries')}</h3>
-                        <p style={{ margin: '0', fontSize: '32px', fontWeight: '600', color: '#667eea' }}>
-                            {foodEntries.length}
-                        </p>
+                    <div 
+                        onClick={() => setActiveFilter('all')}
+                        style={{
+                            background: activeFilter === 'all' 
+                                ? 'linear-gradient(135deg, var(--button-primary) 0%, #667eea 100%)'
+                                : 'linear-gradient(135deg, var(--card-bg) 0%, rgba(102, 126, 234, 0.05) 100%)',
+                            padding: '28px',
+                            borderRadius: '16px',
+                            boxShadow: activeFilter === 'all' 
+                                ? `0 12px 32px rgba(102, 126, 234, 0.3)`
+                                : `0 8px 24px rgba(0,0,0,0.1)`,
+                            textAlign: 'center',
+                            border: activeFilter === 'all' 
+                                ? `2px solid var(--button-primary)`
+                                : `1px solid var(--border-color)`,
+                            transition: 'all 0.3s ease',
+                            position: 'relative',
+                            overflow: 'hidden',
+                            cursor: 'pointer',
+                            transform: activeFilter === 'all' ? 'translateY(-4px)' : 'translateY(0)'
+                        }}
+                        onMouseOver={(e) => {
+                            if (activeFilter !== 'all') {
+                                e.currentTarget.style.transform = 'translateY(-4px)';
+                                e.currentTarget.style.boxShadow = `0 12px 32px rgba(102, 126, 234, 0.2)`;
+                            }
+                        }}
+                        onMouseOut={(e) => {
+                            if (activeFilter !== 'all') {
+                                e.currentTarget.style.transform = 'translateY(0)';
+                                e.currentTarget.style.boxShadow = `0 8px 24px rgba(0,0,0,0.1)`;
+                            }
+                        }}
+                    >
+                        <div style={{
+                            position: 'absolute',
+                            top: '-20px',
+                            right: '-20px',
+                            width: '80px',
+                            height: '80px',
+                            background: 'radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%)',
+                            borderRadius: '50%'
+                        }} />
+                        <div style={{ position: 'relative', zIndex: 1 }}>
+                            <div style={{ fontSize: '40px', marginBottom: '12px' }}>📊</div>
+                            <h3 style={{ 
+                                margin: '0 0 12px 0', 
+                                color: activeFilter === 'all' ? 'white' : 'var(--text-primary)', 
+                                fontSize: '16px', 
+                                fontWeight: '600' 
+                            }}>
+                                {t('dashboard.totalEntries')}
+                            </h3>
+                            <p style={{ 
+                                margin: '0', 
+                                fontSize: '36px', 
+                                fontWeight: '700', 
+                                color: activeFilter === 'all' ? 'white' : '#667eea' 
+                            }}>
+                                {foodEntries.length}
+                            </p>
+                        </div>
                     </div>
                     
-                    <div style={{
-                        background: 'var(--card-bg)',
-                        padding: '24px',
-                        borderRadius: '12px',
-                        boxShadow: `0 4px 12px var(--shadow)`,
-                        textAlign: 'center',
-                        border: `1px solid var(--border-color)`,
-                        transition: 'all 0.3s ease'
-                    }}>
-                        <h3 style={{ margin: '0 0 8px 0', color: 'var(--text-primary)' }}>{t('dashboard.safeEntries')}</h3>
-                        <p style={{ margin: '0', fontSize: '32px', fontWeight: '600', color: '#28a745' }}>
-                            {foodEntries.filter(entry => entry.is_safe).length}
-                        </p>
+                    <div 
+                        onClick={() => setActiveFilter('safe')}
+                        style={{
+                            background: activeFilter === 'safe' 
+                                ? 'linear-gradient(135deg, #28a745 0%, #1e7e34 100%)'
+                                : 'linear-gradient(135deg, var(--card-bg) 0%, rgba(40, 167, 69, 0.05) 100%)',
+                            padding: '28px',
+                            borderRadius: '16px',
+                            boxShadow: activeFilter === 'safe' 
+                                ? `0 12px 32px rgba(40, 167, 69, 0.3)`
+                                : `0 8px 24px rgba(0,0,0,0.1)`,
+                            textAlign: 'center',
+                            border: activeFilter === 'safe' 
+                                ? `2px solid #28a745`
+                                : `1px solid var(--border-color)`,
+                            transition: 'all 0.3s ease',
+                            position: 'relative',
+                            overflow: 'hidden',
+                            cursor: 'pointer',
+                            transform: activeFilter === 'safe' ? 'translateY(-4px)' : 'translateY(0)'
+                        }}
+                        onMouseOver={(e) => {
+                            if (activeFilter !== 'safe') {
+                                e.currentTarget.style.transform = 'translateY(-4px)';
+                                e.currentTarget.style.boxShadow = `0 12px 32px rgba(40, 167, 69, 0.2)`;
+                            }
+                        }}
+                        onMouseOut={(e) => {
+                            if (activeFilter !== 'safe') {
+                                e.currentTarget.style.transform = 'translateY(0)';
+                                e.currentTarget.style.boxShadow = `0 8px 24px rgba(0,0,0,0.1)`;
+                            }
+                        }}
+                    >
+                        <div style={{
+                            position: 'absolute',
+                            top: '-20px',
+                            right: '-20px',
+                            width: '80px',
+                            height: '80px',
+                            background: 'radial-gradient(circle, rgba(40, 167, 69, 0.1) 0%, transparent 70%)',
+                            borderRadius: '50%'
+                        }} />
+                        <div style={{ position: 'relative', zIndex: 1 }}>
+                            <div style={{ fontSize: '40px', marginBottom: '12px' }}>✅</div>
+                            <h3 style={{ 
+                                margin: '0 0 12px 0', 
+                                color: activeFilter === 'safe' ? 'white' : 'var(--text-primary)', 
+                                fontSize: '16px', 
+                                fontWeight: '600' 
+                            }}>
+                                {t('dashboard.safeEntries')}
+                            </h3>
+                            <p style={{ 
+                                margin: '0', 
+                                fontSize: '36px', 
+                                fontWeight: '700', 
+                                color: activeFilter === 'safe' ? 'white' : '#28a745' 
+                            }}>
+                                {foodEntries.filter(entry => entry.is_safe).length}
+                            </p>
+                        </div>
                     </div>
                     
-                    <div style={{
-                        background: 'var(--card-bg)',
-                        padding: '24px',
-                        borderRadius: '12px',
-                        boxShadow: `0 4px 12px var(--shadow)`,
-                        textAlign: 'center',
-                        border: `1px solid var(--border-color)`,
-                        transition: 'all 0.3s ease'
-                    }}>
-                        <h3 style={{ margin: '0 0 8px 0', color: 'var(--text-primary)' }}>{t('dashboard.unsafeEntries')}</h3>
-                        <p style={{ margin: '0', fontSize: '32px', fontWeight: '600', color: '#dc3545' }}>
-                            {foodEntries.filter(entry => !entry.is_safe).length}
-                        </p>
+                    <div 
+                        onClick={() => setActiveFilter('unsafe')}
+                        style={{
+                            background: activeFilter === 'unsafe' 
+                                ? 'linear-gradient(135deg, #dc3545 0%, #c82333 100%)'
+                                : 'linear-gradient(135deg, var(--card-bg) 0%, rgba(220, 53, 69, 0.05) 100%)',
+                            padding: '28px',
+                            borderRadius: '16px',
+                            boxShadow: activeFilter === 'unsafe' 
+                                ? `0 12px 32px rgba(220, 53, 69, 0.3)`
+                                : `0 8px 24px rgba(0,0,0,0.1)`,
+                            textAlign: 'center',
+                            border: activeFilter === 'unsafe' 
+                                ? `2px solid #dc3545`
+                                : `1px solid var(--border-color)`,
+                            transition: 'all 0.3s ease',
+                            position: 'relative',
+                            overflow: 'hidden',
+                            cursor: 'pointer',
+                            transform: activeFilter === 'unsafe' ? 'translateY(-4px)' : 'translateY(0)'
+                        }}
+                        onMouseOver={(e) => {
+                            if (activeFilter !== 'unsafe') {
+                                e.currentTarget.style.transform = 'translateY(-4px)';
+                                e.currentTarget.style.boxShadow = `0 12px 32px rgba(220, 53, 69, 0.2)`;
+                            }
+                        }}
+                        onMouseOut={(e) => {
+                            if (activeFilter !== 'unsafe') {
+                                e.currentTarget.style.transform = 'translateY(0)';
+                                e.currentTarget.style.boxShadow = `0 8px 24px rgba(0,0,0,0.1)`;
+                            }
+                        }}
+                    >
+                        <div style={{
+                            position: 'absolute',
+                            top: '-20px',
+                            right: '-20px',
+                            width: '80px',
+                            height: '80px',
+                            background: 'radial-gradient(circle, rgba(220, 53, 69, 0.1) 0%, transparent 70%)',
+                            borderRadius: '50%'
+                        }} />
+                        <div style={{ position: 'relative', zIndex: 1 }}>
+                            <div style={{ fontSize: '40px', marginBottom: '12px' }}>⚠️</div>
+                            <h3 style={{ 
+                                margin: '0 0 12px 0', 
+                                color: activeFilter === 'unsafe' ? 'white' : 'var(--text-primary)', 
+                                fontSize: '16px', 
+                                fontWeight: '600' 
+                            }}>
+                                {t('dashboard.unsafeEntries')}
+                            </h3>
+                            <p style={{ 
+                                margin: '0', 
+                                fontSize: '36px', 
+                                fontWeight: '700', 
+                                color: activeFilter === 'unsafe' ? 'white' : '#dc3545' 
+                            }}>
+                                {foodEntries.filter(entry => !entry.is_safe).length}
+                            </p>
+                        </div>
                     </div>
                 </div>
 
                 {/* Food Entries List */}
                 <div style={{
                     background: 'var(--card-bg)',
-                    borderRadius: '12px',
-                    boxShadow: `0 4px 12px var(--shadow)`,
+                    borderRadius: '16px',
+                    boxShadow: `0 8px 32px rgba(0,0,0,0.1)`,
                     overflow: 'hidden',
                     border: `1px solid var(--border-color)`,
-                    transition: 'all 0.3s ease'
+                    transition: 'all 0.3s ease',
+                    position: 'relative'
                 }}>
                     <div style={{
-                        padding: '24px',
+                        padding: '28px',
                         borderBottom: `1px solid var(--border-color)`,
-                        background: 'var(--bg-secondary)'
+                        background: 'linear-gradient(135deg, var(--bg-secondary) 0%, rgba(102, 126, 234, 0.02) 100%)',
+                        position: 'relative'
                     }}>
-                        <h2 style={{ margin: '0', color: 'var(--text-primary)' }}>{t('dashboard.foodEntries')}</h2>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                            <div style={{
+                                width: '32px',
+                                height: '32px',
+                                background: 'linear-gradient(135deg, var(--button-primary) 0%, #667eea 100%)',
+                                borderRadius: '8px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '16px',
+                                color: 'white'
+                            }}>
+                                🍽️
+                            </div>
+                            <h2 style={{ margin: '0', color: 'var(--text-primary)', fontSize: '20px', fontWeight: '600' }}>{t('dashboard.foodEntries')}</h2>
+                        </div>
                     </div>
                     
-                    {foodEntries.length === 0 ? (
+                    {filteredEntries.length === 0 ? (
                         <div style={{
-                            padding: '40px',
+                            padding: '60px 40px',
                             textAlign: 'center',
                             color: 'var(--text-secondary)'
                         }}>
-                            <p>{t('dashboard.noEntries')}</p>
+                            <div style={{ fontSize: '48px', marginBottom: '16px', opacity: 0.5 }}>🍽️</div>
+                            <h3 style={{ margin: '0 0 8px 0', color: 'var(--text-primary)', fontSize: '18px', fontWeight: '600' }}>{t('dashboard.noEntries')}</h3>
+                            <p style={{ margin: '0', fontSize: '14px', opacity: 0.7 }}>{t('dashboard.noEntries')}</p>
                         </div>
                     ) : (
                         <div style={{ overflowX: 'auto' }}>
@@ -341,7 +621,7 @@ const MainScreen: React.FC = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {foodEntries.map((entry) => (
+                                    {filteredEntries.map((entry) => (
                                         <tr key={entry.id} style={{ borderBottom: `1px solid var(--border-color)` }}>
                                             <td style={{ padding: '16px', color: 'var(--text-primary)' }}>{entry.user}</td>
                                             <td style={{ padding: '16px', color: 'var(--text-primary)' }}>{entry.food}</td>
@@ -350,9 +630,9 @@ const MainScreen: React.FC = () => {
                                                 {entry.date ? 
                                                     (() => {
                                                         const date = new Date(entry.date);
-                                                        return isNaN(date.getTime()) ? 'Data inválida' : date.toLocaleDateString('pt-BR');
+                                                        return isNaN(date.getTime()) ? t('dashboard.invalidDate') : date.toLocaleDateString('pt-BR');
                                                     })() 
-                                                    : 'Sem data'
+                                                    : t('dashboard.noDate')
                                                 }
                                             </td>
                                             <td style={{ padding: '16px' }}>

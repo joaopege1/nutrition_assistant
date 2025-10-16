@@ -6,6 +6,7 @@ import { TranslationProvider, useTranslation } from './hooks/useTranslation';
 import LoginScreen from './components/LoginScreen';
 import SignupScreen from './components/SignupScreen';
 import MainScreen from './components/MainScreen';
+import UserManagement from './components/UserManagement';
 import ProtectedRoute from './components/ProtectedRoute';
 import LanguageSelector from './components/LanguageSelector';
 import ThemeToggle from './components/ThemeToggle';
@@ -44,6 +45,14 @@ const AppRoutes: React.FC = () => {
                 element={
                     <ProtectedRoute>
                         <MainScreen />
+                    </ProtectedRoute>
+                } 
+            />
+            <Route 
+                path="/admin/users" 
+                element={
+                    <ProtectedRoute>
+                        <UserManagement />
                     </ProtectedRoute>
                 } 
             />

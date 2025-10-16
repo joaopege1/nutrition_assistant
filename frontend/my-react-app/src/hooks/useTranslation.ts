@@ -48,7 +48,9 @@ const ptTranslations = {
     "loginError": "Erro ao fazer login",
     "signupError": "Erro ao criar conta",
     "loginSuccess": "Login realizado com sucesso",
-    "signupSuccess": "Conta criada com sucesso"
+    "signupSuccess": "Conta criada com sucesso",
+    "passwordMismatch": "Senhas não coincidem!",
+    "passwordTooShort": "A senha deve ter pelo menos 6 caracteres!"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -94,6 +96,25 @@ const ptTranslations = {
     "select": "Selecionar idioma",
     "portuguese": "Português",
     "english": "English"
+  },
+  "admin": {
+    "userManagement": "Gerenciar Usuários",
+    "userManagementSubtitle": "Promover usuários a administradores ou rebaixar administradores",
+    "backToDashboard": "Voltar ao Dashboard",
+    "manageUsers": "Gerenciar Usuários",
+    "userList": "Lista de Usuários",
+    "noUsers": "Nenhum usuário encontrado",
+    "administrator": "Administrador",
+    "user": "Usuário Normal",
+    "active": "Ativo",
+    "inactive": "Inativo",
+    "changeRole": "Alterar permissão",
+    "roleUpdated": "Permissão atualizada com sucesso",
+    "roleUpdateError": "Erro ao atualizar permissão do usuário",
+    "loadUsersError": "Erro ao carregar usuários",
+    "confirmRoleChange": "Tem certeza que deseja alterar a permissão deste usuário para {role}?",
+    "accessDenied": "Acesso negado. Apenas administradores podem acessar esta página.",
+    "loadingUsers": "Carregando usuários..."
   }
 };
 
@@ -133,7 +154,9 @@ const enTranslations = {
     "loginError": "Login error",
     "signupError": "Error creating account",
     "loginSuccess": "Login successful",
-    "signupSuccess": "Account created successfully"
+    "signupSuccess": "Account created successfully",
+    "passwordMismatch": "Passwords do not match!",
+    "passwordTooShort": "Password must be at least 6 characters!"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -141,11 +164,11 @@ const enTranslations = {
     "welcomeMessage": "Welcome, {name}!",
     "userInfo": "User information",
     "role": "Role",
-    "totalEntries": "Total entries",
-    "safeEntries": "Safe entries",
-    "unsafeEntries": "Unsafe entries",
+    "totalEntries": "Total Entries",
+    "safeEntries": "Safe Entries",
+    "unsafeEntries": "Unsafe Entries",
     "foodEntries": "Food Entries",
-    "noEntries": "No entries found.",
+    "noEntries": "No Entries Found.",
     "addEntry": "New Entry",
     "user": "User",
     "food": "Food",
@@ -179,6 +202,25 @@ const enTranslations = {
     "select": "Select language",
     "portuguese": "Português",
     "english": "English"
+  },
+  "admin": {
+    "userManagement": "Manage Users",
+    "userManagementSubtitle": "Promote users to administrators or demote administrators",
+    "backToDashboard": "Back to Dashboard",
+    "manageUsers": "Manage Users",
+    "userList": "User List",
+    "noUsers": "No users found",
+    "administrator": "Administrator",
+    "user": "Regular User",
+    "active": "Active",
+    "inactive": "Inactive",
+    "changeRole": "Change permission",
+    "roleUpdated": "Permission updated successfully",
+    "roleUpdateError": "Error updating user permission",
+    "loadUsersError": "Error loading users",
+    "confirmRoleChange": "Are you sure you want to change this user's permission to {role}?",
+    "accessDenied": "Access denied. Only administrators can access this page.",
+    "loadingUsers": "Loading users..."
   }
 };
 

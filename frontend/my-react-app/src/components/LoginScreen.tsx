@@ -106,7 +106,7 @@ const LoginScreen: React.FC = () => {
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             required
-                            placeholder="seu_usuario"
+                            placeholder="username"
                             style={{
                                 width: '100%',
                                 padding: isMobile ? '10px 14px' : '12px 16px',
