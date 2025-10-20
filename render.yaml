@@ -35,7 +35,6 @@ services:
   - type: web
     name: rcu-app-frontend
     runtime: static
-    region: oregon
     branch: main
     buildCommand: cd frontend/my-react-app && bash render-build.sh
     staticPublishPath: frontend/my-react-app/dist
