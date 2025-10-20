@@ -33,7 +33,7 @@ async def create_first_admin():
         
         # Criar o primeiro admin
         admin = User(
-            username="joaopege",
+            username="joaopege.admin",
             email="joaopege@gmail.com",
             full_name="Administrador",
             hashed_password=bcrypt_context.hash("lanternaverde22"),
