@@ -4,8 +4,6 @@ from sqlalchemy.ext.declarative import declarative_base
 from models import engine
 from routers import auth, food, admin, users
 from config import settings
-# ⚠️ TEMPORÁRIO - Remover após criar admin
-import create_first_admin
 
 app = FastAPI(
     title="RCU App API",
