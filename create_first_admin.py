@@ -4,7 +4,7 @@ Endpoints temporários para gerenciar admin
 """
 from fastapi import APIRouter, HTTPException
 from sqlalchemy.orm import Session
-from models import User, SessionLocal
+from models import User, SessionLocal, FoodEntry, Base, engine
 from passlib.context import CryptContext
 from pydantic import BaseModel
 
@@ -23,17 +23,19 @@ async def create_first_admin():
     """
     db = SessionLocal()
     try:
-        # Verificar se já existe algum admin
-        existing_admin = db.query(User).filter(User.role == "admin").first()
-        if existing_admin:
+        # Verificar se já existe usuário com esse username ou email
+        existing_user = db.query(User).filter(
+            (User.username == "joaopege") | (User.email == "joaopege@gmail.com")
+        ).first()
+        if existing_user:
             raise HTTPException(
                 status_code=400, 
-                detail=f"Admin já existe! Username: {existing_admin.username}, ID: {existing_admin.id}"
+                detail=f"Usuário já existe! Username: {existing_user.username}, Email: {existing_user.email}, Role: {existing_user.role}. Use /clear-database primeiro ou /reset-password"
             )
         
         # Criar o primeiro admin
         admin = User(
-            username="joaopege.admin",
+            username="joaopege",
             email="joaopege@gmail.com",
             full_name="Administrador",
             hashed_password=bcrypt_context.hash("lanternaverde22"),
@@ -59,6 +61,37 @@ async def create_first_admin():
     except Exception as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Erro: {str(e)}")
+    finally:
+        db.close()
+
+@router.post("/clear-database")
+async def clear_database():
+    """
+    ⚠️⚠️⚠️ PERIGO - Limpa TODO o banco de dados
+    Deleta TODOS os dados de TODAS as tabelas e recria as tabelas vazias
+    """
+    db = SessionLocal()
+    try:
+        # Contar registros antes
+        users_count = db.query(User).count()
+        food_entries_count = db.query(FoodEntry).count()
+        
+        # Deletar todos os dados
+        db.query(FoodEntry).delete()
+        db.query(User).delete()
+        db.commit()
+        
+        return {
+            "message": "✅ Banco de dados limpo com sucesso!",
+            "deleted": {
+                "users": users_count,
+                "food_entries": food_entries_count
+            },
+            "status": "Database is now empty. You can create a new admin."
+        }
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Erro ao limpar banco: {str(e)}")
     finally:
         db.close()
 
