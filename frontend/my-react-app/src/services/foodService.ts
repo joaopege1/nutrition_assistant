@@ -1,7 +1,8 @@
 import axios from 'axios';
 import type { FoodEntry, FoodEntryCreate } from '../types';
+import { config } from '../config';
 
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = config.apiUrl;
 
 export const foodService = {
     async getFoodEntries(): Promise<FoodEntry[]> {

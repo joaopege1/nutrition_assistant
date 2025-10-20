@@ -1,0 +1,235 @@
+# Deployment Guide for RCU App on Render
+
+This guide covers deploying the RCU App monorepo to Render.com using the included `render.yaml` configuration.
+
+## Overview
+
+The application consists of:
+- **Backend API**: FastAPI application with PostgreSQL database
+- **Frontend**: React (Vite) static site
+- **Database**: PostgreSQL database (free tier)
+
+## Prerequisites
+
+1. A [Render.com](https://render.com) account
+2. GitHub repository connected to Render
+3. Your code pushed to the `main` branch
+
+## Deployment Steps
+
+### 1. Initial Setup
+
+1. Fork or push this repository to GitHub
+2. Log in to your Render account
+3. Click on "New" → "Blueprint"
+4. Connect your GitHub repository
+5. Render will automatically detect the `render.yaml` file
+
+### 2. Environment Variables
+
+The following environment variables are automatically configured by the `render.yaml`:
+
+**Backend (rcu-app-api):**
+- `PYTHON_VERSION`: 3.11.0
+- `DATABASE_URL`: Automatically from PostgreSQL database
+- `SECRET_KEY`: Auto-generated secure key
+- `ALGORITHM`: HS256
+- `ACCESS_TOKEN_EXPIRE_MINUTES`: 30
+- `FRONTEND_URL`: Automatically from frontend service URL
+
+**Frontend (rcu-app-frontend):**
+- `VITE_API_URL`: Automatically from backend service URL
+
+### 3. Deploy
+
+1. Review the services in Render dashboard
+2. Click "Apply" to create all services
+3. Render will:
+   - Create the PostgreSQL database
+   - Deploy the backend API
+   - Build and deploy the frontend
+   - Configure environment variables automatically
+
+### 4. Post-Deployment
+
+After deployment completes:
+
+1. **Initialize Database**:
+   - The backend automatically creates tables on first run
+   - Optionally, you can run migrations using Alembic
+
+2. **Verify Deployment**:
+   - Visit your frontend URL (e.g., `https://rcu-app-frontend.onrender.com`)
+   - Check API health: `https://rcu-app-api.onrender.com/health`
+   - View API docs: `https://rcu-app-api.onrender.com/docs`
+
+## Architecture
+
+```
+┌─────────────────┐
+│   Frontend      │  Static Site (React + Vite)
+│   (Render)      │  → Serves HTML/CSS/JS
+└────────┬────────┘
+         │
+         │ HTTPS Requests
+         ↓
+┌─────────────────┐
+│   Backend API   │  Web Service (FastAPI)
+│   (Render)      │  → Handles business logic
+└────────┬────────┘
+         │
+         │ SQL Queries
+         ↓
+┌─────────────────┐
+│   PostgreSQL    │  Database
+│   (Render)      │  → Stores data
+└─────────────────┘
+```
+
+## Configuration Files
+
+### `render.yaml`
+Defines all services and their configuration:
+- Backend web service
+- Frontend static site
+- PostgreSQL database
+- Environment variables and service connections
+
+### `config.py`
+Backend configuration with environment-aware settings:
+- Database URL handling
+- CORS origins configuration
+- JWT settings
+
+### `frontend/my-react-app/src/config.ts`
+Frontend configuration:
+- API URL from environment variables
+
+## Local Development
+
+### Backend
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the server
+uvicorn main:app --reload
+```
+
+### Frontend
+```bash
+cd frontend/my-react-app
+
+# Install dependencies
+npm install
+
+# Run dev server
+npm run dev
+```
+
+### Environment Variables for Local Development
+
+Create a `.env` file in the root directory:
+```env
+DATABASE_URL=sqlite:///./test.db
+SECRET_KEY=your-local-secret-key
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+FRONTEND_URL=http://localhost:5173
+ENVIRONMENT=development
+```
+
+Create a `.env` file in `frontend/my-react-app/`:
+```env
+VITE_API_URL=http://localhost:8000
+```
+
+## Troubleshooting
+
+### Backend Issues
+
+1. **Database Connection Errors**:
+   - Check DATABASE_URL in Render dashboard
+   - Verify PostgreSQL database is running
+
+2. **CORS Errors**:
+   - Ensure FRONTEND_URL is correctly set
+   - Check `config.py` allowed_origins
+
+3. **Import Errors**:
+   - Verify all dependencies in `requirements.txt`
+   - Check build logs in Render
+
+### Frontend Issues
+
+1. **API Connection Errors**:
+   - Verify VITE_API_URL is set correctly
+   - Check browser console for CORS errors
+   - Ensure backend is running
+
+2. **Build Failures**:
+   - Check Node.js version compatibility
+   - Verify all dependencies in `package.json`
+   - Review build logs in Render
+
+### Database Issues
+
+1. **Tables Not Created**:
+   - Check backend logs for migration errors
+   - Verify database connection string
+   - Manually run: `python -c "from models import Base, engine; Base.metadata.create_all(bind=engine)"`
+
+## Monitoring
+
+- **Health Check**: `GET /health` - Returns service status
+- **API Docs**: `GET /docs` - Interactive API documentation
+- **Render Dashboard**: View logs, metrics, and deployment status
+
+## Scaling
+
+### Free Tier Limitations
+- Backend: Spins down after 15 minutes of inactivity
+- Database: 256 MB storage limit
+- Build minutes: Limited per month
+
+### Upgrading
+To handle more traffic:
+1. Upgrade to paid plans in Render dashboard
+2. Consider Redis for caching
+3. Add CDN for static assets
+
+## Security Considerations
+
+1. **Secret Key**: Auto-generated by Render, rotates on redeployment
+2. **Database**: Not publicly accessible
+3. **HTTPS**: Automatically enabled for all services
+4. **CORS**: Configured to allow only frontend domain
+
+## Useful Commands
+
+```bash
+# View backend logs
+render logs -s rcu-app-api
+
+# View frontend logs
+render logs -s rcu-app-frontend
+
+# Trigger manual deployment
+render deploy -s rcu-app-api
+render deploy -s rcu-app-frontend
+
+# Access database shell
+render shell -s rcu-app-db
+```
+
+## Support
+
+For issues with:
+- **Render Platform**: [Render Documentation](https://render.com/docs)
+- **FastAPI**: [FastAPI Documentation](https://fastapi.tiangolo.com/)
+- **React**: [React Documentation](https://react.dev/)
+
+## License
+
+See LICENSE file in the repository.
+

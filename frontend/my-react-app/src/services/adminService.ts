@@ -1,7 +1,8 @@
 import axios from 'axios';
 import type { FoodEntry, User } from '../types';
+import { config } from '../config';
 
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = config.apiUrl;
 
 export const adminService = {
     async getAllFoodEntries(): Promise<FoodEntry[]> {

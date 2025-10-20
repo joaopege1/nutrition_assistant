@@ -1,7 +1,8 @@
 import axios from 'axios';
 import type { LoginCredentials, SignupData, User, AuthToken } from '../types';
+import { config } from '../config';
 
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = config.apiUrl;
 
 // Configurar axios para incluir token automaticamente
 axios.interceptors.request.use((config) => {
