@@ -4,8 +4,6 @@ from sqlalchemy.ext.declarative import declarative_base
 from models import engine
 from routers import auth, food, admin, users
 from config import settings
-# ⚠️ TEMPORÁRIO - Remover após criar admin
-import create_first_admin
 
 app = FastAPI(
     title="RCU App API",
@@ -31,8 +29,6 @@ app.include_router(auth.router)
 app.include_router(food.router)
 app.include_router(admin.router)
 app.include_router(users.router)
-# ⚠️ TEMPORÁRIO - Remover após criar admin
-app.include_router(create_first_admin.router)
 
 @app.get("/")
 def root():
