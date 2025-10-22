@@ -1,6 +1,5 @@
 # RCU App - Food Tracking
 
-[](https://opensource.org/licenses/MIT)
 [](https://react.dev/)
 [](https://fastapi.tiangolo.com/)
 [](https://www.typescriptlang.org/)
@@ -185,4 +184,4 @@ Contributions are welcome\! If you'd like to help improve the RCU App, please fo
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://opensource.org/licenses/MIT) file for details.
