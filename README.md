@@ -1,4 +1,4 @@
-# RCU App - Food Tracking
+# Nutrition Assistant - Food Tracking
 
 [](https://react.dev/)
 [](https://fastapi.tiangolo.com/)
