@@ -9,6 +9,8 @@ This application was developed to assist individuals with intestinal conditions,
 
 By maintaining simple lists of **safe** and **unsafe** foods, the app simplifies the creation of tailored meal plans and structured diets. This is my first complete personal project, built independently from the ground up.
 
+This is the link for the production demo: https://rcu-app-frontend.onrender.com/
+
 -----
 
 ## Features
