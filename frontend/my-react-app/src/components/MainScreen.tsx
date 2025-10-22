@@ -640,29 +640,44 @@ const MainScreen: React.FC = () => {
                                                     <button
                                                         onClick={() => handleToggleSafety(entry.id, !entry.is_safe)}
                                                         style={{
-                                                            padding: '6px 12px',
-                                                            backgroundColor: entry.is_safe ? 'var(--button-success)' : 'var(--button-danger)',
+                                                            padding: '8px 16px',
+                                                            backgroundColor: entry.is_safe ? '#28a745' : '#dc3545',
                                                             color: 'white',
                                                             border: 'none',
                                                             borderRadius: '6px',
-                                                            fontSize: '12px',
+                                                            fontSize: '13px',
                                                             fontWeight: '600',
                                                             cursor: 'pointer',
-                                                            transition: 'background-color 0.3s ease'
+                                                            transition: 'all 0.3s ease',
+                                                            boxShadow: entry.is_safe 
+                                                                ? '0 2px 8px rgba(40, 167, 69, 0.3)' 
+                                                                : '0 2px 8px rgba(220, 53, 69, 0.3)'
+                                                        }}
+                                                        onMouseOver={(e) => {
+                                                            e.currentTarget.style.backgroundColor = entry.is_safe ? '#218838' : '#c82333';
+                                                            e.currentTarget.style.transform = 'translateY(-1px)';
+                                                        }}
+                                                        onMouseOut={(e) => {
+                                                            e.currentTarget.style.backgroundColor = entry.is_safe ? '#28a745' : '#dc3545';
+                                                            e.currentTarget.style.transform = 'translateY(0)';
                                                         }}
                                                     >
-                                                        {entry.is_safe ? t('dashboard.safe') : t('dashboard.unsafe')}
+                                                        {entry.is_safe ? '✓ ' + t('dashboard.safe') : '✗ ' + t('dashboard.unsafe')}
                                                     </button>
                                                 ) : (
                                                     <span style={{
-                                                        padding: '6px 12px',
-                                                        backgroundColor: entry.is_safe ? 'var(--success-bg)' : 'var(--error-bg)',
-                                                        color: entry.is_safe ? 'var(--success-text)' : 'var(--error-text)',
+                                                        padding: '8px 16px',
+                                                        backgroundColor: entry.is_safe ? '#28a745' : '#dc3545',
+                                                        color: 'white',
                                                         borderRadius: '6px',
-                                                        fontSize: '12px',
-                                                        fontWeight: '600'
+                                                        fontSize: '13px',
+                                                        fontWeight: '600',
+                                                        display: 'inline-block',
+                                                        boxShadow: entry.is_safe 
+                                                            ? '0 2px 8px rgba(40, 167, 69, 0.3)' 
+                                                            : '0 2px 8px rgba(220, 53, 69, 0.3)'
                                                     }}>
-                                                        {entry.is_safe ? t('dashboard.safe') : t('dashboard.unsafe')}
+                                                        {entry.is_safe ? '✓ ' + t('dashboard.safe') : '✗ ' + t('dashboard.unsafe')}
                                                     </span>
                                                 )}
                                             </td>

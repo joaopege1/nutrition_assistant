@@ -1,220 +1,223 @@
-O que eu quero neste app:
+# RCU App - Food Tracking Application
 
+This application was developed to assist individuals with intestinal conditions, such as Crohn's disease, who need to relearn their dietary habits after diagnosis. It enables users to test their favorite foods to determine if they are safe for consumption. By maintaining lists of safe and unsafe foods, the app simplifies the creation of tailored meal plans and structured diets. This is my first complete personal project, built independently.
 
-(Done) Eu quero ser capaz de logar nele.
-(Done) Eu quero poder cadastrar uma comida - endpoint do tipo post - com os seguintes campos:
-    nome da comida (string)
-    quantidade (int)
-    data (datetime) - default: data atual
-(Done) e ter a possibilidade de colocar o resultado dessa comida no fim do dia -- is_safe(bool)
-(Done) entao no fim eu quero:
-(Done)     gerar entao uma lista de comidas que tem is_safe: true e outra lista is_safe: false
+## Features
 
-(Done) Eu quero poder ver a lista de comidas que eu cadastrei, e ver se elas estao na lista safe ou nao.
-(Done) Eu quero poder editar uma comida que eu cadastrei.
-(Done) Eu quero poder deletar uma comida que eu cadastrei.
-(Done)Eu quero poder ver o total de comidas safe e nao safe que eu cadastrei.
-Eu quero poder ver o total de comidas safe e nao safe que eu cadastrei em um periodo de tempo (ex: ultimos 7 dias, ultimos 30 dias)
+### Authentication
+- Login: Secure JWT-based authentication system
+- Registration: Create user or admin accounts
+- Protected Routes: Role-based access control
+- Logout: Secure session termination
 
-Talvez eu possa fazer um agente IA que me ajude a decidir se uma comida é safe ou nao, baseado em pesquisas na internet.
-quero colocar informaçoes se tomei remedio, se fiz exercicio, se bebi alcool, se comi algo diferente do normal.
-quero colocar informaçoes se tive algum sintoma, e quais foram esses sintomas.
+### Food Entry Management
+- Create: Add new food entries with fields:
+  - Food name (string)
+  - Quantity (integer)
+  - Date (datetime, defaults to current date)
+  - Safety status (is_safe: boolean, set at the end of the day)
+- View: Display lists of food entries, separated into:
+  - Safe foods (is_safe: true)
+  - Unsafe foods (is_safe: false)
+- Edit: Modify existing food entries
+- Delete: Remove food entries
+- Statistics: View total counts of safe and unsafe foods:
+  - Overall totals
+  - Totals within a specific time period (e.g., last 7 or 30 days)
 
+### Health and Lifestyle Tracking
+- Track additional health-related information:
+  - Medication intake
+  - Exercise activity
+  - Alcohol consumption
+  - Unusual food consumption
+  - Symptoms experienced (with details)
+- AI Agent (Planned): Suggest food safety based on web research
+- Notifications: Notify users after 24 hours to confirm if a food is safe or unsafe
 
-sqlite3 auth.db
+### Responsive Interface
+- Mobile-first: Optimized for small screens (<= 480px)
+- Tablet: Two-column layout (481px - 768px)
+- Desktop: Full multi-column layout (>= 769px)
+- Modern Design: Clean and intuitive UI
 
-Implementar uma forma de notificar o usuario a dizer se a comida é safe ou nao apos 24h.
+## Technologies Used
 
-# RCU App - Frontend
+### Frontend
+- React 19: Core framework
+- TypeScript: Static typing
+- React Router: Navigation
+- Axios: HTTP requests
+- Vite: Build tool
+- Context API: State management
 
-Uma aplicação React moderna e responsiva para gerenciamento de entradas de comida, conectada com uma API FastAPI.
+### Backend
+- FastAPI: API framework
+- SQLite: Database (auth.db for authentication)
+- Python Libraries: Custom-built backend (no AI assistance)
+- Render: Deployment platform
 
-## 🚀 Funcionalidades
+## Responsivity
 
-### Autenticação
-- **Login**: Sistema de autenticação com JWT
-- **Cadastro**: Criação de contas de usuário e administrador
-- **Proteção de rotas**: Acesso controlado baseado em autenticação
-- **Logout**: Encerramento seguro de sessão
+- Mobile: Single-column layout, touch-friendly buttons
+- Tablet: Hybrid two-column layout
+- Desktop: Full-featured multi-column interface
 
-### Gerenciamento de Entradas
-- **Visualização**: Lista todas as entradas de comida
-- **Criação**: Adicionar novas entradas (apenas admins)
-- **Edição**: Modificar entradas existentes (apenas admins)
-- **Exclusão**: Remover entradas (apenas admins)
-- **Controle de segurança**: Marcar entradas como seguras/inseguras (apenas admins)
+## Installation and Setup
 
-### Interface Responsiva
-- **Mobile-first**: Otimizado para dispositivos móveis
-- **Tablet**: Layout adaptado para tablets
-- **Desktop**: Interface completa para desktop
-- **Design moderno**: Interface limpa e intuitiva
+### Prerequisites
+- Node.js 18+: For frontend
+- Python 3.9+: For backend
+- npm/yarn: For frontend dependencies
+- FastAPI Backend: Running on http://localhost:8000
 
-## 🛠️ Tecnologias Utilizadas
-
-- **React 19** - Framework principal
-- **TypeScript** - Tipagem estática
-- **React Router** - Navegação
-- **Axios** - Cliente HTTP
-- **Vite** - Build tool
-- **Context API** - Gerenciamento de estado
-
-## 📱 Responsividade
-
-A aplicação é totalmente responsiva e se adapta a diferentes tamanhos de tela:
-
-- **Mobile** (≤ 480px): Layout em coluna única, botões maiores para touch
-- **Tablet** (481px - 768px): Layout híbrido com 2 colunas
-- **Desktop** (≥ 769px): Layout completo com múltiplas colunas
-
-## 🔧 Instalação e Execução
-
-### Pré-requisitos
-- Node.js 18+ 
-- npm ou yarn
-- Backend FastAPI rodando na porta 8000
-
-### Instalação
+### Frontend Installation
 ```bash
+cd frontend/my-react-app
 npm install
 ```
 
-### Desenvolvimento
+### Frontend Development
 ```bash
 npm run dev
 ```
 
-### Build para produção
+### Frontend Production Build
 ```bash
 npm run build
-```
-
-### Preview da build
-```bash
 npm run preview
 ```
 
-## 🔗 Conexão com Backend
-
-A aplicação se conecta com os seguintes endpoints do FastAPI:
-
-### Autenticação
-- `POST /auth/tokens` - Login
-- `POST /auth/` - Cadastro
-- `GET /users/` - Dados do usuário atual
-
-### Entradas de Comida
-- `GET /foods/` - Listar entradas
-- `POST /food_entry/` - Criar entrada
-- `PUT /food_entry/{id}` - Atualizar entrada
-- `DELETE /food_entry/{id}` - Deletar entrada
-
-### Admin (apenas para administradores)
-- `GET /auth/admin/foods/` - Todas as entradas
-- `PUT /auth/admin/food_entry/{id}` - Atualizar segurança
-- `DELETE /auth/admin/food_entry/{id}` - Deletar entrada
-
-## 👥 Tipos de Usuário
-
-### Usuário Comum
-- Visualizar entradas de comida
-- Ver estatísticas básicas
-
-### Administrador
-- Todas as funcionalidades do usuário comum
-- Criar, editar e deletar entradas
-- Controlar status de segurança das entradas
-- Acesso a todas as entradas do sistema
-
-## 🎨 Design System
-
-### Cores
-- **Primária**: #667eea (azul)
-- **Sucesso**: #28a745 (verde)
-- **Perigo**: #dc3545 (vermelho)
-- **Info**: #17a2b8 (ciano)
-- **Neutro**: #6c757d (cinza)
-
-### Tipografia
-- **Fonte**: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto
-- **Tamanhos responsivos**: 14px (mobile), 15px (tablet), 16px (desktop)
-
-### Componentes
-- **Cards**: Bordas arredondadas, sombras suaves
-- **Botões**: Estados hover, disabled, loading
-- **Formulários**: Validação em tempo real
-- **Tabelas**: Scroll horizontal em mobile
-
-## 🔒 Segurança
-
-- **JWT Tokens**: Autenticação baseada em tokens
-- **Interceptors**: Inclusão automática de tokens nas requisições
-- **Proteção de rotas**: Verificação de autenticação
-- **Controle de acesso**: Diferentes permissões por tipo de usuário
-
-## 📊 Funcionalidades por Tela
-
-### Login
-- Formulário de autenticação
-- Validação de campos
-- Estados de loading
-- Tratamento de erros
-
-### Cadastro
-- Formulário completo de registro
-- Seleção de tipo de usuário
-- Validação de senhas
-- Confirmação de dados
-
-### Dashboard
-- Estatísticas em tempo real
-- Lista de entradas em tabela
-- Ações contextuais por tipo de usuário
-- Modais para criação/edição
-
-## 🚀 Deploy
-
-### Deploy Rápido com Render (Recomendado)
-
-Este projeto está configurado para deploy automático no Render:
-
-1. **Quick Start**: Veja `RENDER_QUICKSTART.md` para deploy em 5 minutos
-2. **Documentação Completa**: Veja `DEPLOYMENT.md` para guia detalhado
-
+### Backend Setup
+1. Ensure the SQLite database (auth.db) is initialized
+2. Install backend dependencies:
 ```bash
-# Fazer push para GitHub
-git push origin main
-
-# No Render Dashboard:
-# 1. New → Blueprint
-# 2. Selecionar seu repositório
-# 3. Clicar em "Apply"
-# ✅ Deploy automático completo!
+pip install fastapi uvicorn sqlalchemy python-jose[cryptography] passlib[bcrypt]
+```
+3. Run the FastAPI server:
+```bash
+uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
-### Deploy Manual
+## API Endpoints
 
-Para fazer deploy manual da aplicação:
+### Authentication
+- POST /auth/tokens: Login
+- POST /auth/: Register user
+- GET /users/: Get current user details
 
-1. Execute o build: `npm run build`
-2. Os arquivos estáticos estarão na pasta `dist/`
-3. Configure seu servidor web para servir os arquivos da pasta `dist/`
-4. Certifique-se de que a API backend esteja acessível
+### Food Entries
+- GET /foods/: List all food entries
+- POST /food_entry/: Create a food entry
+- PUT /food_entry/{id}: Update a food entry
+- DELETE /food_entry/{id}: Delete a food entry
 
-### Arquivos de Configuração
+### Admin Endpoints
+- GET /auth/admin/foods/: List all food entries (admin only)
+- PUT /auth/admin/food_entry/{id}: Update food safety status (admin only)
+- DELETE /auth/admin/food_entry/{id}: Delete food entry (admin only)
 
-- `render.yaml` - Configuração completa para Render.com
-- `config.py` - Configuração do backend (ambiente, CORS, database)
-- `frontend/my-react-app/src/config.ts` - Configuração do frontend
+## User Roles
 
-## 🤝 Contribuição
+### Regular User
+- View personal food entries
+- View safe/unsafe food lists
+- View basic statistics
 
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature
-3. Commit suas mudanças
-4. Push para a branch
-5. Abra um Pull Request
+### Administrator
+- All regular user capabilities
+- Create, edit, and delete food entries
+- Update food safety status
+- Access all food entries in the system
 
-## 📝 Licença
+## Design System
 
-Este projeto está sob a licença MIT.
+### Colors
+- Primary: #667eea (blue)
+- Success: #28a745 (green)
+- Danger: #dc3545 (red)
+- Info: #17a2b8 (cyan)
+- Neutral: #6c757d (gray)
+
+### Typography
+- Font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto
+- Sizes: 14px (mobile), 15px (tablet), 16px (desktop)
+
+### Components
+- Cards: Rounded borders, soft shadows
+- Buttons: Hover, disabled, and loading states
+- Forms: Real-time validation
+- Tables: Horizontal scroll on mobile
+
+## Security
+
+- JWT Authentication: Token-based access
+- Interceptors: Automatic token inclusion in requests
+- Route Protection: Role-based access control
+- Permission Levels: User vs. admin access
+
+## Screen Features
+
+### Login
+- Authentication form
+- Field validation
+- Loading states
+- Error handling
+
+### Registration
+- Full registration form
+- User type selection
+- Password validation
+- Data confirmation
+
+### Dashboard
+- Real-time statistics
+- Food entry table
+- Contextual actions based on user role
+- Modals for creating/editing entries
+
+## Deployment
+
+### Render (Recommended)
+1. Push to GitHub:
+```bash
+git push origin main
+```
+2. In Render Dashboard:
+   - Create a new Blueprint
+   - Select your repository
+   - Click "Apply" for automatic deployment
+
+See RENDER_QUICKSTART.md for quick setup or DEPLOYMENT.md for detailed instructions.
+
+### Manual Deployment
+1. Build frontend:
+```bash
+npm run build
+```
+2. Serve files from the dist/ folder
+3. Ensure the backend API is accessible
+
+### Configuration Files
+- render.yaml: Render deployment configuration
+- config.py: Backend environment, CORS, and database settings
+- frontend/my-react-app/src/config.ts: Frontend configuration
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit changes
+4. Push to the branch
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License.
+
+## Future Enhancements
+- AI Agent: Implement an AI to suggest food safety based on web research
+- Health Tracking: Add interfaces for medication, exercise, alcohol, and symptom tracking
+- Notifications: Implement 24-hour food safety notifications
+
+</xaiArtifact>

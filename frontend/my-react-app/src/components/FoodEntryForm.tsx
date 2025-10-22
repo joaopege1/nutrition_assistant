@@ -52,7 +52,7 @@ const FoodEntryForm: React.FC<FoodEntryFormProps> = ({ onSubmit, onCancel, initi
                         value={formData.food}
                         onChange={(e) => setFormData({ ...formData, food: e.target.value })}
                         required
-                        placeholder="Nome da comida"
+                        placeholder={t('forms.foodEntry.foodPlaceholder')}
                         style={{
                             width: '100%',
                             padding: '12px 16px',
@@ -124,24 +124,74 @@ const FoodEntryForm: React.FC<FoodEntryFormProps> = ({ onSubmit, onCancel, initi
 
                 <div style={{ marginBottom: '24px' }}>
                     <label style={{
-                        display: 'flex',
-                        alignItems: 'center',
+                        display: 'block',
                         color: '#333',
                         fontSize: '14px',
                         fontWeight: '500',
-                        cursor: 'pointer'
+                        marginBottom: '8px'
                     }}>
-                        <input
-                            type="checkbox"
-                            checked={formData.is_safe}
-                            onChange={(e) => setFormData({ ...formData, is_safe: e.target.checked })}
-                            style={{
-                                marginRight: '8px',
-                                transform: 'scale(1.2)'
-                            }}
-                        />
                         {t('forms.foodEntry.isSafe')}
                     </label>
+                    <div style={{ display: 'flex', gap: '12px' }}>
+                        <button
+                            type="button"
+                            onClick={() => setFormData({ ...formData, is_safe: true })}
+                            style={{
+                                flex: 1,
+                                padding: '14px 24px',
+                                backgroundColor: formData.is_safe ? '#28a745' : '#e1e5e9',
+                                color: formData.is_safe ? 'white' : '#6c757d',
+                                border: formData.is_safe ? '2px solid #28a745' : '2px solid #e1e5e9',
+                                borderRadius: '8px',
+                                fontSize: '16px',
+                                fontWeight: '600',
+                                cursor: 'pointer',
+                                transition: 'all 0.3s ease',
+                                boxShadow: formData.is_safe ? '0 4px 12px rgba(40, 167, 69, 0.3)' : 'none'
+                            }}
+                            onMouseOver={(e) => {
+                                if (!formData.is_safe) {
+                                    e.currentTarget.style.backgroundColor = '#d1d5d9';
+                                }
+                            }}
+                            onMouseOut={(e) => {
+                                if (!formData.is_safe) {
+                                    e.currentTarget.style.backgroundColor = '#e1e5e9';
+                                }
+                            }}
+                        >
+                            ✓ {t('forms.foodEntry.safe')}
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setFormData({ ...formData, is_safe: false })}
+                            style={{
+                                flex: 1,
+                                padding: '14px 24px',
+                                backgroundColor: !formData.is_safe ? '#dc3545' : '#e1e5e9',
+                                color: !formData.is_safe ? 'white' : '#6c757d',
+                                border: !formData.is_safe ? '2px solid #dc3545' : '2px solid #e1e5e9',
+                                borderRadius: '8px',
+                                fontSize: '16px',
+                                fontWeight: '600',
+                                cursor: 'pointer',
+                                transition: 'all 0.3s ease',
+                                boxShadow: !formData.is_safe ? '0 4px 12px rgba(220, 53, 69, 0.3)' : 'none'
+                            }}
+                            onMouseOver={(e) => {
+                                if (formData.is_safe) {
+                                    e.currentTarget.style.backgroundColor = '#d1d5d9';
+                                }
+                            }}
+                            onMouseOut={(e) => {
+                                if (formData.is_safe) {
+                                    e.currentTarget.style.backgroundColor = '#e1e5e9';
+                                }
+                            }}
+                        >
+                            ✗ {t('forms.foodEntry.unsafe')}
+                        </button>
+                    </div>
                 </div>
 
                 <div style={{ display: 'flex', gap: '12px' }}>
