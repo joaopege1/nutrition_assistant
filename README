@@ -1,223 +1,188 @@
-# RCU App - Food Tracking Application
+# RCU App - Food Tracking
 
-This application was developed to assist individuals with intestinal conditions, such as Crohn's disease, who need to relearn their dietary habits after diagnosis. It enables users to test their favorite foods to determine if they are safe for consumption. By maintaining lists of safe and unsafe foods, the app simplifies the creation of tailored meal plans and structured diets. This is my first complete personal project, built independently.
+[](https://opensource.org/licenses/MIT)
+[](https://react.dev/)
+[](https://fastapi.tiangolo.com/)
+[](https://www.typescriptlang.org/)
+[](https://www.sqlite.org/index.html)
+
+This application was developed to assist individuals with intestinal conditions, such as Crohn's disease, who need to relearn their dietary habits after diagnosis. It enables users to test their favorite foods to determine if they are safe for consumption.
+
+By maintaining simple lists of **safe** and **unsafe** foods, the app simplifies the creation of tailored meal plans and structured diets. This is my first complete personal project, built independently from the ground up.
+
+-----
 
 ## Features
 
-### Authentication
-- Login: Secure JWT-based authentication system
-- Registration: Create user or admin accounts
-- Protected Routes: Role-based access control
-- Logout: Secure session termination
+### Authentication & Security
 
-### Food Entry Management
-- Create: Add new food entries with fields:
-  - Food name (string)
-  - Quantity (integer)
-  - Date (datetime, defaults to current date)
-  - Safety status (is_safe: boolean, set at the end of the day)
-- View: Display lists of food entries, separated into:
-  - Safe foods (is_safe: true)
-  - Unsafe foods (is_safe: false)
-- Edit: Modify existing food entries
-- Delete: Remove food entries
-- Statistics: View total counts of safe and unsafe foods:
-  - Overall totals
-  - Totals within a specific time period (e.g., last 7 or 30 days)
+  * **Secure Login:** JWT-based authentication system.
+  * **User Registration:** Ability to create new user or admin accounts.
+  * **Protected Routes:** Role-based access control (User vs. Admin) to secure endpoints and views.
+  * **HTTP Interceptors:** Axios is configured to automatically include the auth token in all requests.
 
-### Health and Lifestyle Tracking
-- Track additional health-related information:
-  - Medication intake
-  - Exercise activity
-  - Alcohol consumption
-  - Unusual food consumption
-  - Symptoms experienced (with details)
-- AI Agent (Planned): Suggest food safety based on web research
-- Notifications: Notify users after 24 hours to confirm if a food is safe or unsafe
+### Food & Health Management
 
-### Responsive Interface
-- Mobile-first: Optimized for small screens (<= 480px)
-- Tablet: Two-column layout (481px - 768px)
-- Desktop: Full multi-column layout (>= 769px)
-- Modern Design: Clean and intuitive UI
+  * **Create Entries:** Add new food entries with name, quantity, and date.
+  * **Safety Status:** Mark foods as `is_safe: true` or `is_safe: false` after a testing period.
+  * **View Lists:** Display dynamically filtered lists of all "Safe" and "Unsafe" foods.
+  * **CRUD Operations:** Full ability to edit and delete existing food entries.
+  * **Health Tracking:** Log other critical information that may affect symptoms, including:
+      * Medication intake
+      * Exercise activity
+      * Alcohol consumption
+      * Unusual food consumption
+      * Symptom details
 
-## Technologies Used
+### Statistics & Insights
 
-### Frontend
-- React 19: Core framework
-- TypeScript: Static typing
-- React Router: Navigation
-- Axios: HTTP requests
-- Vite: Build tool
-- Context API: State management
+  * **Dashboard Stats:** View total counts of safe and unsafe foods.
+  * **Time-Based Filtering:** See statistics for different time periods (e.g., last 7 or 30 days).
 
-### Backend
-- FastAPI: API framework
-- SQLite: Database (auth.db for authentication)
-- Python Libraries: Custom-built backend (no AI assistance)
-- Render: Deployment platform
+### Responsive Design
 
-## Responsivity
+  * **Mobile-First:** A clean, single-column layout optimized for small screens (`<= 480px`).
+  * **Tablet View:** A two-column layout for medium-sized screens (`481px - 768px`).
+  * **Desktop View:** A full, multi-column layout for larger screens (`>= 769px`).
 
-- Mobile: Single-column layout, touch-friendly buttons
-- Tablet: Hybrid two-column layout
-- Desktop: Full-featured multi-column interface
+-----
 
-## Installation and Setup
+## Technology Stack
+
+| Category | Technology | Description |
+| :--- | :--- | :--- |
+| **Frontend** | [React 19](https://react.dev/) | Core UI library. |
+| | [TypeScript](https://www.typescriptlang.org/) | Static typing for JavaScript. |
+| | [React Router](https://reactrouter.com/) | Client-side routing and navigation. |
+| | [Vite](https://vitejs.dev/) | Next-generation frontend build tool. |
+| **State Mgmt** | [Context API](https://react.dev/reference/react/useContext) | Built-in state management. |
+| **HTTP Client** | [Axios](https://axios-http.com/) | Promise-based HTTP client for requests. |
+| **Backend** | [FastAPI](https://fastapi.tiangolo.com/) | High-performance Python API framework. |
+| | [SQLite](https://www.sqlite.org/index.html) | Serverless, self-contained database engine. |
+| **Authentication** | [JWT](https://jwt.io/) / `python-jose` | Secure token-based authentication. |
+| | `passlib[bcrypt]` | Secure password hashing. |
+| **Deployment** | [Render](https://render.com/) | Cloud platform for deploying web apps. |
+
+-----
+
+## Getting Started
+
+Follow these instructions to get a copy of the project up and running on your local machine for development and testing.
 
 ### Prerequisites
-- Node.js 18+: For frontend
-- Python 3.9+: For backend
-- npm/yarn: For frontend dependencies
-- FastAPI Backend: Running on http://localhost:8000
 
-### Frontend Installation
-```bash
-cd frontend/my-react-app
-npm install
-```
+  * [Node.js](https://nodejs.org/) (v18 or newer)
+  * [Python](https://www.python.org/) (v3.9 or newer)
+  * `npm` or `yarn`
 
-### Frontend Development
-```bash
-npm run dev
-```
+### 1\. Backend Setup (API)
 
-### Frontend Production Build
-```bash
-npm run build
-npm run preview
-```
+First, clone the repository and set up the backend server.
 
-### Backend Setup
-1. Ensure the SQLite database (auth.db) is initialized
-2. Install backend dependencies:
 ```bash
-pip install fastapi uvicorn sqlalchemy python-jose[cryptography] passlib[bcrypt]
-```
-3. Run the FastAPI server:
-```bash
+# Clone the repository (if you haven't)
+git clone https://github.com/your-username/rcu-app.git
+cd rcu-app
+
+# Navigate to the backend directory (adjust if needed)
+# cd backend/
+
+# Install Python dependencies
+pip install fastapi uvicorn sqlalchemy "python-jose[cryptography]" "passlib[bcrypt]"
+
+# Run the FastAPI server
+# This will start the server on http://localhost:8000
 uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
-## API Endpoints
+**Note:** Ensure your `auth.db` (SQLite database) is initialized as per your backend's logic (FastAPI/SQLAlchemy models).
 
-### Authentication
-- POST /auth/tokens: Login
-- POST /auth/: Register user
-- GET /users/: Get current user details
+### 2\. Frontend Setup (Client)
 
-### Food Entries
-- GET /foods/: List all food entries
-- POST /food_entry/: Create a food entry
-- PUT /food_entry/{id}: Update a food entry
-- DELETE /food_entry/{id}: Delete a food entry
+In a separate terminal, navigate to the frontend directory and install its dependencies.
 
-### Admin Endpoints
-- GET /auth/admin/foods/: List all food entries (admin only)
-- PUT /auth/admin/food_entry/{id}: Update food safety status (admin only)
-- DELETE /auth/admin/food_entry/{id}: Delete food entry (admin only)
+```bash
+# Navigate to the frontend app
+cd frontend/my-react-app
+
+# Install npm packages
+npm install
+
+# Run the frontend development server
+# This will start the app on http://localhost:5173 (or similar)
+npm run dev
+```
+
+The application should now be running and connected to your local backend.
+
+-----
+
+## ☁️ Deployment
+
+This project is configured for easy deployment on **Render**.
+
+### Render (Recommended)
+
+The repository includes a `render.yaml` file. You can deploy both the frontend and backend automatically by following these steps:
+
+1.  Push your code to your GitHub repository.
+2.  In the Render Dashboard, create a new **Blueprint**.
+3.  Select your repository.
+4.  Render will read the `render.yaml` file and automatically configure the services.
+5.  Click **"Apply"** to deploy.
+
+For more detailed instructions, see `DEPLOYMENT.md`.
+
+### Manual Deployment
+
+1.  **Build Frontend:**
+    ```bash
+    cd frontend/my-react-app
+    npm run build
+    ```
+2.  Serve the static files from the `dist/` folder using a static host.
+3.  Deploy the backend (FastAPI application) to a service like Render, ensuring the frontend has the correct API URL.
+
+-----
 
 ## User Roles
 
+The application supports two distinct user roles with different permissions.
+
 ### Regular User
-- View personal food entries
-- View safe/unsafe food lists
-- View basic statistics
+
+  * Can create, view, edit, and delete their **own** food entries.
+  * Can view their personal safe/unsafe food lists.
+  * Can view their personal statistics.
 
 ### Administrator
-- All regular user capabilities
-- Create, edit, and delete food entries
-- Update food safety status
-- Access all food entries in the system
 
-## Design System
+  * Has all capabilities of a regular user.
+  * Can view, edit, and delete **all** food entries in the system.
+  * Can update the safety status of any food entry.
 
-### Colors
-- Primary: #667eea (blue)
-- Success: #28a745 (green)
-- Danger: #dc3545 (red)
-- Info: #17a2b8 (cyan)
-- Neutral: #6c757d (gray)
+-----
 
-### Typography
-- Font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto
-- Sizes: 14px (mobile), 15px (tablet), 16px (desktop)
+## Roadmap (Future Enhancements)
 
-### Components
-- Cards: Rounded borders, soft shadows
-- Buttons: Hover, disabled, and loading states
-- Forms: Real-time validation
-- Tables: Horizontal scroll on mobile
+  * **AI Agent:** Implement an AI-powered agent to suggest a food's likely safety status based on web research and user-provided symptom patterns.
+  * **Notifications:** Add a notification system to remind users 24 hours after logging a new food to confirm its safety status.
+  * **Advanced Health Tracking:** Build out the UI and database models for the planned medication, exercise, alcohol, and symptom tracking features.
 
-## Security
+-----
 
-- JWT Authentication: Token-based access
-- Interceptors: Automatic token inclusion in requests
-- Route Protection: Role-based access control
-- Permission Levels: User vs. admin access
+## 🤝 Contributing
 
-## Screen Features
+Contributions are welcome\! If you'd like to help improve the RCU App, please follow these steps:
 
-### Login
-- Authentication form
-- Field validation
-- Loading states
-- Error handling
+1.  Fork the repository.
+2.  Create a new feature branch (`git checkout -b feature/AmazingFeature`).
+3.  Commit your changes (`git commit -m 'Add some AmazingFeature'`).
+4.  Push to the branch (`git push origin feature/AmazingFeature`).
+5.  Open a Pull Request.
 
-### Registration
-- Full registration form
-- User type selection
-- Password validation
-- Data confirmation
+-----
 
-### Dashboard
-- Real-time statistics
-- Food entry table
-- Contextual actions based on user role
-- Modals for creating/editing entries
+## 📄 License
 
-## Deployment
-
-### Render (Recommended)
-1. Push to GitHub:
-```bash
-git push origin main
-```
-2. In Render Dashboard:
-   - Create a new Blueprint
-   - Select your repository
-   - Click "Apply" for automatic deployment
-
-See RENDER_QUICKSTART.md for quick setup or DEPLOYMENT.md for detailed instructions.
-
-### Manual Deployment
-1. Build frontend:
-```bash
-npm run build
-```
-2. Serve files from the dist/ folder
-3. Ensure the backend API is accessible
-
-### Configuration Files
-- render.yaml: Render deployment configuration
-- config.py: Backend environment, CORS, and database settings
-- frontend/my-react-app/src/config.ts: Frontend configuration
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit changes
-4. Push to the branch
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License.
-
-## Future Enhancements
-- AI Agent: Implement an AI to suggest food safety based on web research
-- Health Tracking: Add interfaces for medication, exercise, alcohol, and symptom tracking
-- Notifications: Implement 24-hour food safety notifications
-
-</xaiArtifact>
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
