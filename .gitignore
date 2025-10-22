@@ -61,7 +61,8 @@ htmlcov/
 
 # Node modules (if any Node.js tools are used)
 node_modules/
-package-lock.json
+/package-lock.json
+/package.json
 
 # Build artifacts
 dist/
