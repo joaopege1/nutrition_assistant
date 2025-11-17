@@ -6,8 +6,8 @@ from routers import auth, food, admin, users
 from config import settings
 
 app = FastAPI(
-    title="RCU App API",
-    description="API for RCU Application",
+    title="Nutrition Assistant API",
+    description="API for Nutrition Assistant Application",
     version="1.0.0"
 )
 Base = declarative_base()
@@ -34,7 +34,7 @@ app.include_router(users.router)
 def root():
     """Root endpoint"""
     return {
-        "message": "Welcome to RCU App API",
+        "message": "Welcome to Nutrition Assistant API",
         "docs": "/docs",
         "health": "/health"
     }

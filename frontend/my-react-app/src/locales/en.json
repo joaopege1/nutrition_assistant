@@ -36,7 +36,8 @@
     "loginSuccess": "Login successful",
     "signupSuccess": "Account created successfully",
     "passwordMismatch": "Passwords do not match!",
-    "passwordTooShort": "Password must be at least 6 characters!"
+    "passwordTooShort": "Password must be at least 6 characters!",
+    "backToHome": "Back to Home"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -104,5 +105,26 @@
     "confirmRoleChange": "Are you sure you want to change this user's permission to {role}?",
     "accessDenied": "Access denied. Only administrators can access this page.",
     "loadingUsers": "Loading users..."
+  },
+  "landing": {
+    "appName": "Nutrition Assistant - Food Tracking",
+    "appTagline": "Monitor your intestinal health intelligently",
+    "aboutTitle": "About the App",
+    "aboutDescription1": "Nutrition Assistant - Food Tracking is a comprehensive tool to help you manage your intestinal health. With it, you can log your meals, identify safe and unsafe foods for your body, and track patterns over time.",
+    "aboutDescription2": "Our platform allows you to make informed decisions about your diet, improve your quality of life, and share relevant information with healthcare professionals when needed.",
+    "diseasesTitle": "Understanding Intestinal Diseases",
+    "diseasesIntro": "Intestinal diseases affect millions of people worldwide and can significantly impact quality of life. Understanding these conditions is the first step to managing them effectively:",
+    "ibd": "Inflammatory Bowel Disease (IBD)",
+    "ibdDescription": "Includes Crohn's Disease and Ulcerative Colitis (UC). Chronic conditions that cause inflammation of the gastrointestinal tract, leading to symptoms like abdominal pain, diarrhea, and fatigue.",
+    "ibs": "Irritable Bowel Syndrome (IBS)",
+    "ibsDescription": "A functional disorder affecting the large intestine, causing abdominal discomfort, bloating, and changes in bowel habits without visible damage to the digestive tract.",
+    "celiac": "Celiac Disease",
+    "celiacDescription": "An autoimmune condition where gluten ingestion causes damage to the small intestine. Requires a strictly gluten-free diet to prevent symptoms and complications.",
+    "foodIntolerance": "Food Intolerances",
+    "foodIntoleranceDescription": "Difficulty digesting certain foods, such as lactose or fructose, which can cause uncomfortable gastrointestinal symptoms.",
+    "diseasesConclusion": "With Nutrition Assistant - Food Tracking, you can identify your personal food triggers and better manage your intestinal condition, whatever it may be.",
+    "getStarted": "Get Started",
+    "signupPrompt": "Don't have an account yet?",
+    "signupLink": "Sign up for free"
   }
 }

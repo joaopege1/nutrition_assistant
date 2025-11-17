@@ -174,7 +174,7 @@ The application supports two distinct user roles with different permissions.
 
 ## 🤝 Contributing
 
-Contributions are welcome\! If you'd like to help improve the RCU App, please follow these steps:
+Contributions are welcome\! If you'd like to help improve the Nutrition Assistant, please follow these steps:
 
 1.  Fork the repository.
 2.  Create a new feature branch (`git checkout -b feature/AmazingFeature`).

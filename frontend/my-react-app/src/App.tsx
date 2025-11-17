@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { TranslationProvider, useTranslation } from './hooks/useTranslation';
+import Dashboard from './components/Dashboard';
 import LoginScreen from './components/LoginScreen';
 import SignupScreen from './components/SignupScreen';
 import MainScreen from './components/MainScreen';
@@ -33,6 +34,10 @@ const AppRoutes: React.FC = () => {
     return (
         <Routes>
             <Route 
+                path="/" 
+                element={isAuthenticated ? <Navigate to="/main" replace /> : <Dashboard />} 
+            />
+            <Route 
                 path="/login" 
                 element={isAuthenticated ? <Navigate to="/main" replace /> : <LoginScreen />} 
             />
@@ -55,10 +60,6 @@ const AppRoutes: React.FC = () => {
                         <UserManagement />
                     </ProtectedRoute>
                 } 
-            />
-            <Route 
-                path="/" 
-                element={<Navigate to={isAuthenticated ? "/main" : "/login"} replace />} 
             />
         </Routes>
     );

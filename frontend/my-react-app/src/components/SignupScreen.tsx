@@ -73,7 +73,6 @@ const SignupScreen: React.FC = () => {
             padding: isMobile ? '8px' : isTablet ? '16px' : '24px',
             position: 'relative'
         }}>
-            {/* Theme Toggle Button */}
             <div style={{
                 background: 'var(--card-bg)',
                 padding: isMobile ? '20px' : isTablet ? '32px' : '40px',
@@ -85,18 +84,37 @@ const SignupScreen: React.FC = () => {
                 border: `1px solid var(--border-color)`,
                 transition: 'all 0.3s ease'
             }}>
+                <div style={{ marginBottom: isMobile ? '20px' : '24px' }}>
+                    <Link
+                        to="/"
+                        style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            color: 'var(--text-secondary)',
+                            textDecoration: 'none',
+                            fontSize: isMobile ? '13px' : '14px',
+                            fontWeight: '500',
+                            transition: 'color 0.2s ease'
+                        }}
+                        onMouseOver={(e) => e.currentTarget.style.color = 'var(--button-primary)'}
+                        onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-secondary)'}
+                    >
+                        ← {t('auth.backToHome')}
+                    </Link>
+                </div>
+                
                 <div style={{ textAlign: 'center', marginBottom: isMobile ? '24px' : '30px' }}>
                     <h2 style={{
                         color: 'var(--text-primary)',
                         fontSize: isMobile ? '24px' : isTablet ? '26px' : '28px',
                         fontWeight: '600',
                         margin: '0 0 8px 0'
-                    }}>Criar conta</h2>
+                    }}>{t('auth.signupTitle')}</h2>
                     <p style={{
                         color: 'var(--text-secondary)',
                         fontSize: isMobile ? '14px' : '16px',
                         margin: '0'
-                    }}>Preencha os dados para se cadastrar</p>
+                    }}>{t('auth.signupSubtitle')}</p>
                 </div>
 
                 {error && (

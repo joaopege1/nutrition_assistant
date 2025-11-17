@@ -118,6 +118,27 @@ const ptTranslations = {
     "confirmRoleChange": "Tem certeza que deseja alterar a permissão deste usuário para {role}?",
     "accessDenied": "Acesso negado. Apenas administradores podem acessar esta página.",
     "loadingUsers": "Carregando usuários..."
+  },
+  "landing": {
+    "appName": "Nutrition Assistant - Food Tracking",
+    "appTagline": "Monitore sua saúde intestinal de forma inteligente",
+    "aboutTitle": "Sobre o Aplicativo",
+    "aboutDescription1": "O Nutrition Assistant - Food Tracking é uma ferramenta completa para ajudar você a gerenciar sua saúde intestinal. Com ele, você pode registrar suas refeições, identificar alimentos seguros e inseguros para seu organismo, e acompanhar padrões ao longo do tempo.",
+    "aboutDescription2": "Nossa plataforma permite que você tome decisões informadas sobre sua dieta, melhore sua qualidade de vida e compartilhe informações relevantes com profissionais de saúde quando necessário.",
+    "diseasesTitle": "Entendendo as Doenças Intestinais",
+    "diseasesIntro": "Doenças intestinais afetam milhões de pessoas em todo o mundo e podem impactar significativamente a qualidade de vida. Entender essas condições é o primeiro passo para gerenciá-las efetivamente:",
+    "ibd": "Doença Inflamatória Intestinal (DII)",
+    "ibdDescription": "Inclui Doença de Crohn e Retocolite Ulcerativa (RCU). Condições crônicas que causam inflamação do trato gastrointestinal, levando a sintomas como dor abdominal, diarreia e fadiga.",
+    "ibs": "Síndrome do Intestino Irritável (SII)",
+    "ibsDescription": "Distúrbio funcional que afeta o intestino grosso, causando desconforto abdominal, inchaço, e mudanças nos hábitos intestinais sem danos visíveis ao trato digestivo.",
+    "celiac": "Doença Celíaca",
+    "celiacDescription": "Condição autoimune em que a ingestão de glúten causa danos ao intestino delgado. Requer uma dieta estritamente livre de glúten para prevenir sintomas e complicações.",
+    "foodIntolerance": "Intolerâncias Alimentares",
+    "foodIntoleranceDescription": "Dificuldade em digerir certos alimentos, como lactose ou frutose, que pode causar sintomas gastrointestinais desconfortáveis.",
+    "diseasesConclusion": "Com o Nutrition Assistant - Food Tracking, você pode identificar seus gatilhos alimentares pessoais e gerenciar melhor sua condição intestinal, seja ela qual for.",
+    "getStarted": "Começar Agora",
+    "signupPrompt": "Ainda não tem conta?",
+    "signupLink": "Cadastre-se gratuitamente"
   }
 };
 
@@ -159,7 +180,8 @@ const enTranslations = {
     "loginSuccess": "Login successful",
     "signupSuccess": "Account created successfully",
     "passwordMismatch": "Passwords do not match!",
-    "passwordTooShort": "Password must be at least 6 characters!"
+    "passwordTooShort": "Password must be at least 6 characters!",
+    "backToHome": "Back to Home"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -227,6 +249,27 @@ const enTranslations = {
     "confirmRoleChange": "Are you sure you want to change this user's permission to {role}?",
     "accessDenied": "Access denied. Only administrators can access this page.",
     "loadingUsers": "Loading users..."
+  },
+  "landing": {
+    "appName": "Nutrition Assistant - Food Tracking",
+    "appTagline": "Monitor your intestinal health intelligently",
+    "aboutTitle": "About the App",
+    "aboutDescription1": "Nutrition Assistant - Food Tracking is a comprehensive tool to help you manage your intestinal health. With it, you can log your meals, identify safe and unsafe foods for your body, and track patterns over time.",
+    "aboutDescription2": "Our platform allows you to make informed decisions about your diet, improve your quality of life, and share relevant information with healthcare professionals when needed.",
+    "diseasesTitle": "Understanding Intestinal Diseases",
+    "diseasesIntro": "Intestinal diseases affect millions of people worldwide and can significantly impact quality of life. Understanding these conditions is the first step to managing them effectively:",
+    "ibd": "Inflammatory Bowel Disease (IBD)",
+    "ibdDescription": "Includes Crohn's Disease and Ulcerative Colitis (UC). Chronic conditions that cause inflammation of the gastrointestinal tract, leading to symptoms like abdominal pain, diarrhea, and fatigue.",
+    "ibs": "Irritable Bowel Syndrome (IBS)",
+    "ibsDescription": "A functional disorder affecting the large intestine, causing abdominal discomfort, bloating, and changes in bowel habits without visible damage to the digestive tract.",
+    "celiac": "Celiac Disease",
+    "celiacDescription": "An autoimmune condition where gluten ingestion causes damage to the small intestine. Requires a strictly gluten-free diet to prevent symptoms and complications.",
+    "foodIntolerance": "Food Intolerances",
+    "foodIntoleranceDescription": "Difficulty digesting certain foods, such as lactose or fructose, which can cause uncomfortable gastrointestinal symptoms.",
+    "diseasesConclusion": "With Nutrition Assistant - Food Tracking, you can identify your personal food triggers and better manage your intestinal condition, whatever it may be.",
+    "getStarted": "Get Started",
+    "signupPrompt": "Don't have an account yet?",
+    "signupLink": "Sign up for free"
   }
 };
 

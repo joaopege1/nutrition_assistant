@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Test runner script for RCU App
+# Test runner script for Nutrition Assistant
 
 # Colors for output
 GREEN='\033[0;32m'
@@ -9,7 +9,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 echo -e "${BLUE}=================================${NC}"
-echo -e "${BLUE}    RCU App Test Runner${NC}"
+echo -e "${BLUE}    Nutrition Assistant Test Runner${NC}"
 echo -e "${BLUE}=================================${NC}"
 echo ""
 

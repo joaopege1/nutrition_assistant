@@ -1,6 +1,6 @@
 # Test Suite Documentation
 
-This directory contains comprehensive unit and integration tests for the RCU App backend API.
+This directory contains comprehensive unit and integration tests for the Nutrition Assistant backend API.
 
 ## Test Structure
 
