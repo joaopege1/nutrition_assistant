@@ -16,7 +16,11 @@ from datetime import timedelta
 
 from main import app
 from models import Base, User, FoodEntry
-from routers.auth import get_db, bcrypt_context, create_access_token
+from routers import auth as auth_router
+from routers import users as users_router
+from routers import food as food_router
+from routers import admin as admin_router
+from routers.auth import bcrypt_context, create_access_token
 
 # Create in-memory SQLite database for testing
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
@@ -51,7 +55,10 @@ def client(db_session):
         finally:
             pass
     
-    app.dependency_overrides[get_db] = override_get_db
+    # Each router currently defines its own get_db (issue #11 — to be centralized).
+    # Override every one so tests don't leak into the real dev database.
+    for module in (auth_router, users_router, food_router, admin_router):
+        app.dependency_overrides[module.get_db] = override_get_db
     with TestClient(app) as test_client:
         yield test_client
     app.dependency_overrides.clear()

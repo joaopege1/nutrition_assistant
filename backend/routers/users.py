@@ -21,8 +21,8 @@ def get_db():
         db.close()
 
 class UserVerification(BaseModel):
-    username: str
-    password: str = Field(min_length=6)
+    password: str
+    new_password: str = Field(min_length=8, max_length=128)
 
 db_dependency = Annotated[Session, Depends(get_db)]
 user_dependency = Annotated[dict, Depends(get_current_user)]
@@ -43,10 +43,15 @@ async def change_password(
     if user is None:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials")
     db_user = db.query(User).filter(User.id == user['id']).first()
+    if db_user is None:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials")
     if not bcrypt_context.verify(user_data.password, db_user.hashed_password):
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Incorrect password")
-    new_hashed_password = bcrypt_context.hash(user_data.password)
-    db_user.hashed_password = new_hashed_password
+    if user_data.new_password == user_data.password:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="New password must be different from current password",
+        )
+    db_user.hashed_password = bcrypt_context.hash(user_data.new_password)
     db.commit()
-    return {"message": "Password updated successfully"}
 

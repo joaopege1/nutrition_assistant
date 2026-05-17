@@ -19,18 +19,18 @@ class TestUserCreation:
                 "email": "newuser@example.com",
                 "full_name": "New User",
                 "password": "password123",
-                "role": "user"
             }
         )
         assert response.status_code == status.HTTP_201_CREATED
         data = response.json()
-        assert data["message"] == "User created"
-        assert data["user"]["username"] == "newuser"
-        assert data["user"]["email"] == "newuser@example.com"
-        # The password field exists in response but we just check user was created
-    
-    def test_create_admin_user(self, client):
-        """Test creating admin user."""
+        assert data["username"] == "newuser"
+        assert data["email"] == "newuser@example.com"
+        assert data["role"] == "user"
+        assert "password" not in data
+        assert "hashed_password" not in data
+
+    def test_signup_cannot_self_assign_admin_role(self, client):
+        """Signup must never honor client-supplied role — always defaults to 'user'."""
         response = client.post(
             "/auth/",
             json={
@@ -38,13 +38,12 @@ class TestUserCreation:
                 "email": "admin@example.com",
                 "full_name": "Admin User",
                 "password": "adminpass123",
-                "role": "admin"
+                "role": "admin",
             }
         )
         assert response.status_code == status.HTTP_201_CREATED
-        data = response.json()
-        assert data["user"]["role"] == "admin"
-    
+        assert response.json()["role"] == "user"
+
     def test_create_user_duplicate_username(self, client, test_user):
         """Test creating user with duplicate username."""
         response = client.post(
@@ -54,12 +53,10 @@ class TestUserCreation:
                 "email": "different@example.com",
                 "full_name": "Different User",
                 "password": "password123",
-                "role": "user"
             }
         )
-        # SQLite will raise an integrity error for duplicate username
-        assert response.status_code == 500 or response.status_code == status.HTTP_400_BAD_REQUEST
-    
+        assert response.status_code == status.HTTP_409_CONFLICT
+
     def test_create_user_duplicate_email(self, client, test_user):
         """Test creating user with duplicate email."""
         response = client.post(
@@ -69,11 +66,9 @@ class TestUserCreation:
                 "email": test_user.email,
                 "full_name": "Different User",
                 "password": "password123",
-                "role": "user"
             }
         )
-        # SQLite will raise an integrity error for duplicate email
-        assert response.status_code == 500 or response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.status_code == status.HTTP_409_CONFLICT
 
 
 @pytest.mark.unit
@@ -176,8 +171,7 @@ class TestPasswordHashing:
                 "username": "hashtest",
                 "email": "hash@example.com",
                 "full_name": "Hash Test",
-                "password": "plainpassword",
-                "role": "user"
+                "password": "plainpassword"
             }
         )
         
@@ -198,8 +192,7 @@ class TestPasswordHashing:
                 "username": "user1",
                 "email": "user1@example.com",
                 "full_name": "User 1",
-                "password": "samepassword",
-                "role": "user"
+                "password": "samepassword"
             }
         )
         
@@ -209,8 +202,7 @@ class TestPasswordHashing:
                 "username": "user2",
                 "email": "user2@example.com",
                 "full_name": "User 2",
-                "password": "samepassword",
-                "role": "user"
+                "password": "samepassword"
             }
         )
         

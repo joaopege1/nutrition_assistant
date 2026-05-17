@@ -38,84 +38,64 @@ class TestGetUser:
 class TestChangePassword:
     """Test password change functionality."""
     
-    def test_change_password_success(self, client, test_user, auth_headers):
-        """Test successfully changing password."""
-        # Note: The current implementation has a bug - it verifies old password
-        # but then sets it to the same password. This test follows the current behavior.
-        password_data = {
-            "username": test_user.username,
-            "password": "testpassword123"  # Current password
-        }
-        
+    def test_change_password_success(self, client, test_user, auth_headers, db_session):
+        """Password is actually updated to the new value."""
+        from models import User
+        from routers.auth import bcrypt_context
+
         response = client.put(
             "/users/password",
-            json=password_data,
-            headers=auth_headers
+            json={"password": "testpassword123", "new_password": "brand-new-pass-456"},
+            headers=auth_headers,
         )
-        assert response.status_code == status.HTTP_204_NO_CONTENT or response.status_code == status.HTTP_200_OK
-    
-    def test_change_password_wrong_current_password(self, client, test_user, auth_headers):
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+
+        db_session.expire_all()
+        updated = db_session.query(User).filter(User.id == test_user.id).first()
+        assert bcrypt_context.verify("brand-new-pass-456", updated.hashed_password)
+        assert not bcrypt_context.verify("testpassword123", updated.hashed_password)
+
+    def test_change_password_wrong_current_password(self, client, auth_headers):
         """Test changing password with wrong current password."""
-        password_data = {
-            "username": test_user.username,
-            "password": "wrongpassword"
-        }
-        
         response = client.put(
             "/users/password",
-            json=password_data,
-            headers=auth_headers
+            json={"password": "wrongpassword", "new_password": "brand-new-pass-456"},
+            headers=auth_headers,
         )
         assert response.status_code == status.HTTP_403_FORBIDDEN
-    
-    def test_change_password_unauthenticated(self, client, test_user):
+
+    def test_change_password_same_as_current(self, client, auth_headers):
+        """Reject reusing the same password."""
+        response = client.put(
+            "/users/password",
+            json={"password": "testpassword123", "new_password": "testpassword123"},
+            headers=auth_headers,
+        )
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    def test_change_password_unauthenticated(self, client):
         """Test changing password without authentication."""
-        password_data = {
-            "username": test_user.username,
-            "password": "newpassword123"
-        }
-        
-        response = client.put("/users/password", json=password_data)
+        response = client.put(
+            "/users/password",
+            json={"password": "testpassword123", "new_password": "brand-new-pass-456"},
+        )
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
-    
+
     def test_change_password_too_short(self, client, auth_headers):
-        """Test changing password with too short password."""
-        password_data = {
-            "username": "testuser",
-            "password": "12345"  # Less than 6 characters
-        }
-        
+        """new_password must be at least 8 characters."""
         response = client.put(
             "/users/password",
-            json=password_data,
-            headers=auth_headers
+            json={"password": "testpassword123", "new_password": "1234567"},
+            headers=auth_headers,
         )
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
-    
-    def test_change_password_missing_username(self, client, auth_headers):
-        """Test changing password without username."""
-        password_data = {
-            "password": "newpassword123"
-        }
-        
+
+    def test_change_password_missing_new_password(self, client, auth_headers):
+        """Test changing password without new_password."""
         response = client.put(
             "/users/password",
-            json=password_data,
-            headers=auth_headers
-        )
-        assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
-    
-    def test_change_password_empty_password(self, client, auth_headers):
-        """Test changing password with empty password."""
-        password_data = {
-            "username": "testuser",
-            "password": ""
-        }
-        
-        response = client.put(
-            "/users/password",
-            json=password_data,
-            headers=auth_headers
+            json={"password": "testpassword123"},
+            headers=auth_headers,
         )
         assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 

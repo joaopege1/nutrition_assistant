@@ -1,29 +1,37 @@
 from fastapi import APIRouter, Depends, status, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr, Field
 from models import User, SessionLocal
 from passlib.context import CryptContext
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from typing import Annotated
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, timezone
+from config import settings
 
 router = APIRouter(
     prefix="/auth",
     tags=["auth"]
     )
 
-SECRET_KEY = 'ce7dfcb4f4e276661caf69fe3e6505fc122901c0bb4b4b2bd9a0602b49c2cd6d'
-ALGORITHM = 'HS256'
+SECRET_KEY = settings.SECRET_KEY
+ALGORITHM = settings.ALGORITHM
 
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/tokens")
 
 class CreateUser(BaseModel):
-    username: str
-    email: str
+    username: str = Field(min_length=3, max_length=50)
+    email: EmailStr
     full_name: str | None = None
-    password: str
+    password: str = Field(min_length=8, max_length=128)
+
+class UserPublic(BaseModel):
+    id: int
+    username: str
+    email: EmailStr
+    full_name: str | None = None
     role: str
 
 class Token(BaseModel):
@@ -49,7 +57,7 @@ def authenticate_user(username: str, password: str, db):
 
 def create_access_token(username: str, user_id: int, role: str, expire_delta: timedelta):
     encode = {"sub": username, "id": user_id, "role": role}
-    expire = datetime.utcnow() + expire_delta
+    expire = datetime.now(timezone.utc) + expire_delta
     encode.update({"exp": expire})
     return jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
 
@@ -66,22 +74,29 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     except JWTError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Could not validate credentials")
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("/", status_code=status.HTTP_201_CREATED, response_model=UserPublic)
 async def create_user(db: db_dependency, create_user_request: CreateUser):
-    create_user_model=User(
+    create_user_model = User(
         email=create_user_request.email,
         full_name=create_user_request.full_name,
         hashed_password=bcrypt_context.hash(create_user_request.password),
         username=create_user_request.username,
-        role=create_user_request.role,
-        is_active=True
+        role="user",
+        is_active=True,
     )
-    
+
     db.add(create_user_model)
-    db.commit()
+    try:
+        db.commit()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Username or email already registered",
+        )
     db.refresh(create_user_model)
 
-    return {"message": "User created", "user": create_user_request}
+    return create_user_model
 
 @router.post("/tokens", response_model=Token)
 async def login_for_access_token(form_data: Annotated[OAuth2PasswordRequestForm, Depends()], db: db_dependency):
