@@ -64,6 +64,10 @@ node_modules/
 /package-lock.json
 /package.json
 
+# Docker
+.docker/
+docker-compose.override.yml
+
 # Build artifacts
 dist/
 build/

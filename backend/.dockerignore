@@ -1,0 +1,32 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+
+# Local DBs — never bake into the image
+*.db
+*.sqlite
+*.sqlite3
+auth.db
+test.db
+
+# Tests are not needed in the runtime image
+test/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Tooling
+.git/
+.gitignore
+.dockerignore
+Dockerfile
+README.md
+*.md
+
+# OS
+.DS_Store

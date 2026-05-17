@@ -1,0 +1,22 @@
+node_modules/
+dist/
+build/
+.vite/
+
+# Tooling
+.git/
+.gitignore
+.dockerignore
+Dockerfile
+README.md
+*.md
+
+# Local env (use ARG at build time instead)
+.env
+.env.local
+.env.*.local
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/

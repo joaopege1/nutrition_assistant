@@ -59,90 +59,90 @@ This is the link for the production demo: https://rcu-app-frontend.onrender.com/
 | **State Mgmt** | [Context API](https://react.dev/reference/react/useContext) | Built-in state management. |
 | **HTTP Client** | [Axios](https://axios-http.com/) | Promise-based HTTP client for requests. |
 | **Backend** | [FastAPI](https://fastapi.tiangolo.com/) | High-performance Python API framework. |
-| | [SQLite](https://www.sqlite.org/index.html) | Serverless, self-contained database engine. |
+| | [PostgreSQL](https://www.postgresql.org/) | Production database (SQLite for quick local tests). |
 | **Authentication** | [JWT](https://jwt.io/) / `python-jose` | Secure token-based authentication. |
 | | `passlib[bcrypt]` | Secure password hashing. |
-| **Deployment** | [Render](https://render.com/) | Cloud platform for deploying web apps. |
+| **Containers** | [Docker Compose](https://docs.docker.com/compose/) | One-command local dev environment. |
+| **Deployment** | [Render](https://render.com/) + [Neon](https://neon.tech/) + [Vercel](https://vercel.com/) | Backend, database, and frontend — all free tier. |
 
 -----
 
 ## Getting Started
 
-Follow these instructions to get a copy of the project up and running on your local machine for development and testing.
+The whole stack (backend + Postgres + frontend) runs via Docker Compose. You only need Docker installed locally.
 
 ### Prerequisites
 
-  * [Node.js](https://nodejs.org/) (v18 or newer)
-  * [Python](https://www.python.org/) (v3.9 or newer)
-  * `npm` or `yarn`
+  * [Docker](https://www.docker.com/) (with Compose v2)
 
-### 1\. Backend Setup (API)
-
-First, clone the repository and set up the backend server.
+### Run locally
 
 ```bash
-# Clone the repository (if you haven't)
 git clone https://github.com/your-username/rcu-app.git
 cd rcu-app
 
-# Navigate to the backend directory (adjust if needed)
-# cd backend/
-
-# Install Python dependencies
-pip install fastapi uvicorn sqlalchemy "python-jose[cryptography]" "passlib[bcrypt]"
-
-# Run the FastAPI server
-# This will start the server on http://localhost:8000
-uvicorn main:app --host 0.0.0.0 --port 8000
+cp .env.example .env       # adjust if you want different DB credentials
+docker compose up --build
 ```
 
-**Note:** Ensure your `auth.db` (SQLite database) is initialized as per your backend's logic (FastAPI/SQLAlchemy models).
+This starts:
 
-### 2\. Frontend Setup (Client)
+| Service    | URL                          | Notes                              |
+| :--------- | :--------------------------- | :--------------------------------- |
+| Frontend   | http://localhost:5173        | Vite dev server, hot reload        |
+| Backend    | http://localhost:8000        | FastAPI with `--reload`            |
+| Postgres   | localhost:5432               | Data persisted in `postgres_data`  |
 
-In a separate terminal, navigate to the frontend directory and install its dependencies.
-
-```bash
-# Navigate to the frontend app
-cd frontend/my-react-app
-
-# Install npm packages
-npm install
-
-# Run the frontend development server
-# This will start the app on http://localhost:5173 (or similar)
-npm run dev
-```
-
-The application should now be running and connected to your local backend.
+The backend auto-creates its tables on first boot. To stop and wipe everything: `docker compose down -v`.
 
 -----
 
 ## ☁️ Deployment
 
-This project is configured for easy deployment on **Render**.
+The free-tier, no-credit-card stack:
 
-### Render (Recommended)
+| Piece     | Service                                                             |
+| :-------- | :------------------------------------------------------------------ |
+| Database  | [Neon](https://neon.tech) (Postgres, 3 GB free)                     |
+| Backend   | [Render](https://render.com) (Web Service free tier, Docker runtime)|
+| Frontend  | [Vercel](https://vercel.com) (Hobby plan, free)                     |
 
-The repository includes a `render.yaml` file. You can deploy both the frontend and backend automatically by following these steps:
+### 1. Database — Neon
 
-1.  Push your code to your GitHub repository.
-2.  In the Render Dashboard, create a new **Blueprint**.
-3.  Select your repository.
-4.  Render will read the `render.yaml` file and automatically configure the services.
-5.  Click **"Apply"** to deploy.
+1. Sign up at https://neon.tech (GitHub login, no card).
+2. Create a project. Copy the **Pooled connection string** (looks like
+   `postgresql://user:pass@ep-xxx-pooler.region.aws.neon.tech/dbname?sslmode=require`).
+3. Keep it open — you'll paste it into Render next.
 
-For more detailed instructions, see `DEPLOYMENT.md`.
+### 2. Backend — Render
 
-### Manual Deployment
+1. Sign up at https://render.com (GitHub login, no card for free tier).
+2. Push this repo to GitHub.
+3. In Render → **New** → **Blueprint** → select your repo. It picks up `render.yaml`
+   and creates the `rcu-app-api` service from `backend/Dockerfile`.
+4. In the service's **Environment** tab, set the three secrets marked
+   `sync: false`:
+   - `DATABASE_URL` — the Neon connection string from step 1.
+   - `SECRET_KEY` — generate with `python -c "import secrets; print(secrets.token_hex(32))"`.
+   - `FRONTEND_URL` — leave blank for now; fill it after deploying Vercel.
+5. Deploy. Note the public URL (something like `https://rcu-app-api.onrender.com`).
 
-1.  **Build Frontend:**
-    ```bash
-    cd frontend/my-react-app
-    npm run build
-    ```
-2.  Serve the static files from the `dist/` folder using a static host.
-3.  Deploy the backend (FastAPI application) to a service like Render, ensuring the frontend has the correct API URL.
+> Render's free Web Service sleeps after ~15 min idle (cold start ~50 s on next
+> request). To keep it warm, point a free [UptimeRobot](https://uptimerobot.com)
+> monitor at `/health` every 5 min.
+
+### 3. Frontend — Vercel
+
+1. Sign up at https://vercel.com (GitHub login, no card).
+2. **New Project** → import the same repo.
+3. Vercel auto-detects Vite. Set the **Root Directory** to `frontend/my-react-app`.
+4. Under **Environment Variables**, add `VITE_API_URL` = your Render backend URL
+   (`https://rcu-app-api.onrender.com`).
+5. Deploy. Copy the Vercel URL.
+
+### 4. Wire frontend back into backend CORS
+
+Back in Render, set `FRONTEND_URL` = your Vercel URL and redeploy. Done.
 
 -----
 
